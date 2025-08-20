@@ -32,10 +32,12 @@ public class Hall {
    @JoinColumn(name = "cinema_id")
    private Cinema cinema;
    
-   @ElementCollection
-   @CollectionTable(name = "hall_screening_times", joinColumns = @JoinColumn(name = "hall_id"))
-   @Column(name = "screening_time")
-   @Builder.Default
+   // Temporarily disabled to fix mapping issue
+   // @ElementCollection
+   // @CollectionTable(name = "hall_screening_times", joinColumns = @JoinColumn(name = "hall_id"))
+   // @Column(name = "screening_time")
+   // @Builder.Default
+   @Transient
    private List<String> screeningTimes = new ArrayList<>();
    
    @OneToMany(mappedBy = "hall",cascade = CascadeType.ALL, orphanRemoval = true)
