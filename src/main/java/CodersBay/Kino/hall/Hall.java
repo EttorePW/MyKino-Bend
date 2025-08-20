@@ -30,12 +30,14 @@ public class Hall {
    @ManyToOne
    @JoinColumn(name = "cinemaId")
    private Cinema cinema;
-   private List<String> screeningTimes = new ArrayList<>();
+   
+   @Column(name = "screening_times")
+   private String screeningTimes; // Cambio temporal para resolver el error
    @OneToMany(mappedBy = "hall",cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Movie_plays_in> moviePlaysInList = new ArrayList<>();
 
 
-   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion,double seatPrice, Cinema cinema, List<String> screeningTimes) {
+   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion,double seatPrice, Cinema cinema, String screeningTimes) {
       this.capacity = capacity;
       this.occupiedSeats = occupiedSeats;
       this.supportedMovieVersion = supportedMovieVersion;

@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +28,25 @@ public class RespHallDTO {
     private MovieVersion supportedMovieVersion;
     private double seatPrice;
     private RespCinemaDTO cinemaDTO;
-    private List<String> screeningTimes = new ArrayList<>();
+    private String screeningTimes; // Horarios como texto separado por comas
+
+    // Métodos de conveniencia para compatibilidad con frontend
+    public List<String> getScreeningTimesAsList() {
+        if (screeningTimes == null || screeningTimes.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return Arrays.asList(screeningTimes.split(","))
+                .stream()
+                .map(String::trim)
+                .collect(Collectors.toList());
+    }
+
+    public void setScreeningTimesFromList(List<String> times) {
+        if (times == null || times.isEmpty()) {
+            this.screeningTimes = "";
+        } else {
+            this.screeningTimes = String.join(",", times);
+        }
+    }
 
 }
