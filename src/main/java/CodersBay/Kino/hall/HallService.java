@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -28,9 +30,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HallService {
+    private static final Logger logger = LoggerFactory.getLogger(HallService.class);
 
     private final HallRepository hallRepository;
     private final CinemaRepository cinemaRepository;
+    private final HallScreeningTimeService hallScreeningTimeService;
 
 
     public RespHallDTO createNewHall(NewHallDTO newHallDTO) {
@@ -57,6 +61,15 @@ public class HallService {
     }
 
     public RespHallDTO convertToRespHallDTO(Hall hall) {
+        // Obtener screeningTimes desde la base de datos usando el nuevo servicio
+        List<String> screeningTimes = new ArrayList<>();
+        try {
+            screeningTimes = hallScreeningTimeService.getScreeningTimes(hall.getHallId());
+            logger.info("Fetched {} screening times for hall {}", screeningTimes.size(), hall.getHallId());
+        } catch (Exception e) {
+            logger.error("Error fetching screening times for hall {}: {}", hall.getHallId(), e.getMessage());
+        }
+        
         return RespHallDTO.builder()
                 .hallId(hall.getHallId())
                 .capacity(hall.getCapacity())
@@ -64,7 +77,7 @@ public class HallService {
                 .supportedMovieVersion(hall.getSupportedMovieVersion())
                 .seatPrice(hall.getSeatPrice())
                 .cinemaDTO(convertToRespCinemaDTO(hall.getCinema()))
-                .screeningTimes(hall.getScreeningTimes())
+                .screeningTimes(screeningTimes) // Usar los datos obtenidos de la base de datos
                 .build();
     }
 
