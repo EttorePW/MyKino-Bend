@@ -29,7 +29,7 @@ public class Hall {
    private MovieVersion supportedMovieVersion;
    private double seatPrice;
    @ManyToOne
-   @JoinColumn(name = "cinemaId")
+   @JoinColumn(name = "cinema_id")
    private Cinema cinema;
    
    @ElementCollection
