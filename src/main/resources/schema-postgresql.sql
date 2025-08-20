@@ -1,5 +1,5 @@
--- Schema para MyKino-Bend
--- Este archivo se ejecutará antes que data.sql
+-- Schema para MyKino-Bend (PostgreSQL - Render)
+-- Este archivo se ejecutará en Render con PostgreSQL
 
 -- Eliminar constrains y tablas si existen para recrearlas
 DROP TABLE IF EXISTS movie_plays_in CASCADE;
@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS users CASCADE;
 
 -- Crear tabla movie
 CREATE TABLE movie (
-    movie_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    movie_id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255),
     main_character VARCHAR(255),
     description TEXT,
@@ -26,7 +26,7 @@ CREATE TABLE movie (
 
 -- Crear tabla customer
 CREATE TABLE customer (
-    customer_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customer_id BIGSERIAL PRIMARY KEY,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     email VARCHAR(255),
@@ -37,7 +37,7 @@ CREATE TABLE customer (
 
 -- Crear tabla users
 CREATE TABLE users (
-    user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGSERIAL PRIMARY KEY,
     user_first_name VARCHAR(255),
     user_last_name VARCHAR(255),
     user_email VARCHAR(255),
@@ -47,7 +47,7 @@ CREATE TABLE users (
 
 -- Crear tabla cinema
 CREATE TABLE cinema (
-    cinema_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    cinema_id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255),
     address VARCHAR(255),
     manager VARCHAR(255),
@@ -56,7 +56,7 @@ CREATE TABLE cinema (
 
 -- Crear tabla hall
 CREATE TABLE hall (
-    hall_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    hall_id BIGSERIAL PRIMARY KEY,
     capacity INTEGER,
     occupied_seats INTEGER,
     supported_movie_version VARCHAR(50),
@@ -68,7 +68,7 @@ CREATE TABLE hall (
 
 -- Crear tabla seat
 CREATE TABLE seat (
-    seat_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    seat_id BIGSERIAL PRIMARY KEY,
     cinema_name VARCHAR(255),
     hall_id INTEGER,
     movie_id INTEGER,
@@ -85,7 +85,7 @@ CREATE TABLE seat (
 
 -- Crear tabla bill
 CREATE TABLE bill (
-    bill_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    bill_id BIGSERIAL PRIMARY KEY,
     customer_name VARCHAR(255),
     total_price DECIMAL(10,2),
     bill_date DATE,
