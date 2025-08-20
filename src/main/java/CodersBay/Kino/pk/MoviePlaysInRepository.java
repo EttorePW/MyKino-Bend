@@ -12,4 +12,7 @@ public interface MoviePlaysInRepository extends JpaRepository<Movie_plays_in, Mo
     
     @Query("SELECT mpi FROM Movie_plays_in mpi WHERE mpi.movie.movieId = :movieId")
     List<Movie_plays_in> findByMovieMovieId(@Param("movieId") Long movieId);
+    
+    @Query(value = "SELECT hall_id FROM movie_plays_in WHERE movie_id = :movieId", nativeQuery = true)
+    List<Long> findHallIdsByMovieId(@Param("movieId") Long movieId);
 }
