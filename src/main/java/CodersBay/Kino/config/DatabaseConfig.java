@@ -19,13 +19,26 @@ public class DatabaseConfig {
     public DataSource dataSource() {
         String databaseUrl = System.getenv("DATABASE_URL");
         
+        System.out.println("[DEBUG] DATABASE_URL: " + databaseUrl);
+        
         if (databaseUrl != null && databaseUrl.startsWith("postgresql://")) {
             try {
                 URI dbUri = new URI(databaseUrl);
                 
-                String username = dbUri.getUserInfo().split(":")[0];
-                String password = dbUri.getUserInfo().split(":")[1];
-                String jdbcUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+                String[] userInfo = dbUri.getUserInfo().split(":");
+                String username = userInfo[0];
+                String password = userInfo[1];
+                
+                // Handle port properly - if not specified, use default PostgreSQL port
+                int port = dbUri.getPort();
+                if (port == -1) {
+                    port = 5432;
+                }
+                
+                String jdbcUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath();
+                
+                System.out.println("[DEBUG] Converted JDBC URL: " + jdbcUrl);
+                System.out.println("[DEBUG] Username: " + username);
                 
                 return DataSourceBuilder
                     .create()
@@ -35,18 +48,20 @@ public class DatabaseConfig {
                     .password(password)
                     .build();
                     
-            } catch (URISyntaxException e) {
-                throw new RuntimeException("Invalid DATABASE_URL format", e);
+            } catch (Exception e) {
+                System.err.println("[ERROR] Failed to parse DATABASE_URL: " + e.getMessage());
+                throw new RuntimeException("Invalid DATABASE_URL format: " + databaseUrl, e);
             }
         }
         
-        // Fallback to default configuration
+        System.out.println("[DEBUG] Using fallback H2 database");
+        // Fallback to H2 for development
         return DataSourceBuilder
             .create()
-            .driverClassName("org.postgresql.Driver")
-            .url("jdbc:postgresql://localhost:5432/kinodb")
-            .username("postgres")
-            .password("password")
+            .driverClassName("org.h2.Driver")
+            .url("jdbc:h2:mem:testdb")
+            .username("sa")
+            .password("")
             .build();
     }
 }
