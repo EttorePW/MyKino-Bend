@@ -49,9 +49,15 @@ CREATE TABLE hall (
     occupied_seats INTEGER,
     supported_movie_version VARCHAR(50),
     seat_price DECIMAL(10,2),
-    screening_times TEXT, -- Columna para almacenar horarios como JSON o texto separado por comas
     cinema_id BIGINT,
     CONSTRAINT fk_hall_cinema FOREIGN KEY (cinema_id) REFERENCES cinema(cinema_id)
+);
+
+-- Crear tabla para screening times (ElementCollection)
+CREATE TABLE hall_screening_times (
+    hall_id BIGINT NOT NULL,
+    screening_time VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_screening_times_hall FOREIGN KEY (hall_id) REFERENCES hall(hall_id) ON DELETE CASCADE
 );
 
 -- Crear tabla seat

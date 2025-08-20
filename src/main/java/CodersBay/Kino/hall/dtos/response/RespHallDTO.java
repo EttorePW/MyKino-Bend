@@ -6,15 +6,15 @@ import CodersBay.Kino.enums.MovieVersion;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,25 +28,9 @@ public class RespHallDTO {
     private MovieVersion supportedMovieVersion;
     private double seatPrice;
     private RespCinemaDTO cinemaDTO;
-    private String screeningTimes; // Horarios como texto separado por comas
-
-    // Métodos de conveniencia para compatibilidad con frontend
-    public List<String> getScreeningTimesAsList() {
-        if (screeningTimes == null || screeningTimes.trim().isEmpty()) {
-            return new ArrayList<>();
-        }
-        return Arrays.asList(screeningTimes.split(","))
-                .stream()
-                .map(String::trim)
-                .collect(Collectors.toList());
-    }
-
-    public void setScreeningTimesFromList(List<String> times) {
-        if (times == null || times.isEmpty()) {
-            this.screeningTimes = "";
-        } else {
-            this.screeningTimes = String.join(",", times);
-        }
-    }
+    
+    // Ahora directamente una lista de strings - tal como el frontend espera
+    @Builder.Default
+    private List<String> screeningTimes = new ArrayList<>();
 
 }

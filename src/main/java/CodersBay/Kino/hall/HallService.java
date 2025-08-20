@@ -52,7 +52,15 @@ public class HallService {
     }
 
     public RespHallDTO convertToRespHallDTO(Hall hall) {
-        return new RespHallDTO(hall.getHallId(),hall.getCapacity(),hall.getOccupiedSeats(),hall.getSupportedMovieVersion(), hall.getSeatPrice(), convertToRespCinemaDTO(hall.getCinema()),hall.getScreeningTimes());
+        return RespHallDTO.builder()
+                .hallId(hall.getHallId())
+                .capacity(hall.getCapacity())
+                .occupiedSeats(hall.getOccupiedSeats())
+                .supportedMovieVersion(hall.getSupportedMovieVersion())
+                .seatPrice(hall.getSeatPrice())
+                .cinemaDTO(convertToRespCinemaDTO(hall.getCinema()))
+                .screeningTimes(hall.getScreeningTimes())
+                .build();
     }
 
     private RespCinemaDTO convertToRespCinemaDTO(Cinema cinema) {

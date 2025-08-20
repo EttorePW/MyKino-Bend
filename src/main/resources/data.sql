@@ -37,11 +37,32 @@ VALUES
 -- ==============================================
 -- Inserts para tabla hall
 -- ==============================================
-INSERT INTO hall (capacity, occupied_seats, supported_movie_version, seat_price, screening_times, cinema_id)
+INSERT INTO hall (capacity, occupied_seats, supported_movie_version, seat_price, cinema_id)
 VALUES
-    (100, 20, 'D2D', 80.00, '14:00,16:30,19:00,21:30', 1),
-    (150, 50, 'R3D', 120.00, '15:00,17:30,20:00,22:30', 1),
-    (200, 75, 'D2D', 90.00, '13:30,16:00,18:30,21:00', 2);
+    (100, 20, 'D2D', 80.00, 1),
+    (150, 50, 'R3D', 120.00, 1),
+    (200, 75, 'D2D', 90.00, 2);
+
+-- ==============================================
+-- Inserts para tabla hall_screening_times
+-- ==============================================
+INSERT INTO hall_screening_times (hall_id, screening_time)
+VALUES
+    -- Horarios para hall 1
+    (1, '14:00'),
+    (1, '16:30'),
+    (1, '19:00'),
+    (1, '21:30'),
+    -- Horarios para hall 2
+    (2, '15:00'),
+    (2, '17:30'),
+    (2, '20:00'),
+    (2, '22:30'),
+    -- Horarios para hall 3
+    (3, '13:30'),
+    (3, '16:00'),
+    (3, '18:30'),
+    (3, '21:00');
 
 -- ==============================================
 -- Inserts para tabla seat
