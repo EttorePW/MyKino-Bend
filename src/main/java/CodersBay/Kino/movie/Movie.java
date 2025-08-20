@@ -35,7 +35,6 @@ public class Movie {
     @Column(name = "main_character")
     private String mainCharacter;
     
-    @Lob
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     
