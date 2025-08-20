@@ -93,9 +93,17 @@ public class MovieService {
     }
 
     public List<RespHallDTO> getHallsList(Movie movie) {
-        List<RespHallDTO> hallList;
-        Movie findedMovie = movieRepository.findById(movie.getMovieId()).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+movie.getMovieId()));
-        hallList = findedMovie.getMoviePlaysInList().stream().map(mpi -> hallService.convertToRespHallDTO(mpi.getHall())).toList();
+        List<RespHallDTO> hallList = new ArrayList<>();
+        try {
+            // Obtener las relaciones movie_plays_in directamente usando el repositorio
+            List<Movie_plays_in> moviePlaysInList = moviePlaysInRepository.findByMovieMovieId(movie.getMovieId());
+            hallList = moviePlaysInList.stream()
+                .map(mpi -> hallService.convertToRespHallDTO(mpi.getHall()))
+                .toList();
+        } catch (Exception e) {
+            // Log del error y devolver lista vacía en caso de fallo
+            System.err.println("Error getting halls for movie " + movie.getMovieId() + ": " + e.getMessage());
+        }
         return hallList;
     }
 
