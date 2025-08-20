@@ -89,7 +89,8 @@ public class MovieService {
     }
 
     public RespMovieDTO convertToRespMovieDTO(Movie movie) {
-        return new RespMovieDTO(movie.getMovieId(),movie.getTitle(),movie.getMainCharacter(),movie.getDescription(),movie.getPremieredAt(),movie.getMovieVersion(),getHallsList(movie),movie.getImage(),movie.getImageBkd(),movie.getVideoId());
+        // Temporary fix - return empty list for halls to avoid database mapping error
+        return new RespMovieDTO(movie.getMovieId(),movie.getTitle(),movie.getMainCharacter(),movie.getDescription(),movie.getPremieredAt(),movie.getMovieVersion(),new ArrayList<>(),movie.getImage(),movie.getImageBkd(),movie.getVideoId());
     }
 
     public List<RespHallDTO> getHallsList(Movie movie) {
