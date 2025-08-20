@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: mykino-backend
+    runtime: java
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -Dspring.profiles.active=prod -jar target/Kino-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JAVA_TOOL_OPTIONS
+        value: -XX:MaxRAMPercentage=50.0
+    healthCheckPath: /actuator/health
+  - type: pserv
+    name: mykino-database
+    runtime: postgresql
+    plan: free
