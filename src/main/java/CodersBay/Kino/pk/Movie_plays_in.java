@@ -1,0 +1,29 @@
+package CodersBay.Kino.pk;
+
+import CodersBay.Kino.hall.Hall;
+import CodersBay.Kino.movie.Movie;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+
+@IdClass(Movie_plays_in_PK.class)
+public class Movie_plays_in {
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "hallId")
+    private Hall hall;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "movieId")
+    private Movie movie;
+}

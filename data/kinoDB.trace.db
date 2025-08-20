@@ -1,0 +1,8 @@
+2025-08-20 13:10:40.328388+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax Fehler in SQL Befehl "DELETE [*]* FROM BILL"; erwartet "identifier"
+Syntax error in SQL statement "DELETE [*]* FROM BILL"; expected "identifier"; SQL statement:
+DELETE * FROM BILL [42001-232]
+2025-08-20 13:11:06.719763+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax Fehler in SQL Befehl "[*]DELETECUSTOMER  FROM CUSTOMER"; erwartet "DELETE, DROP"
+Syntax error in SQL statement "[*]DELETECUSTOMER  FROM CUSTOMER"; expected "DELETE, DROP"; SQL statement:
+DELETECUSTOMER  FROM CUSTOMER [42001-232]
