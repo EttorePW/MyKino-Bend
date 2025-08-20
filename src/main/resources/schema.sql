@@ -3,6 +3,7 @@
 
 -- Eliminar constrains y tablas si existen para recrearlas
 DROP TABLE IF EXISTS movie_plays_in CASCADE;
+DROP TABLE IF EXISTS bill CASCADE;
 DROP TABLE IF EXISTS seat CASCADE;
 DROP TABLE IF EXISTS hall CASCADE;
 DROP TABLE IF EXISTS cinema CASCADE;
@@ -80,6 +81,16 @@ CREATE TABLE seat (
     premiered_at DATE,
     customer_id BIGINT,
     CONSTRAINT fk_seat_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+);
+
+-- Crear tabla bill
+CREATE TABLE bill (
+    bill_id BIGSERIAL PRIMARY KEY,
+    customer_name VARCHAR(255),
+    total_price DECIMAL(10,2),
+    bill_date DATE,
+    customer_id BIGINT,
+    CONSTRAINT fk_bill_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
 -- Crear tabla movie_plays_in (relación many-to-many)

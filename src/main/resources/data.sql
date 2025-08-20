@@ -53,6 +53,15 @@ VALUES
     ('Cinemark Norte', 3, 3, 'R3D', 'Avatar', 10, 12, '2025-08-22', '20:30', DATE '2009-12-18', 3);
 
 -- ==============================================
+-- Inserts para tabla bill
+-- ==============================================
+INSERT INTO bill (customer_name, total_price, bill_date, customer_id)
+VALUES
+    ('Juan Pérez', 160.00, DATE '2025-08-21', 1),
+    ('María Gómez', 240.00, DATE '2025-08-21', 2),
+    ('Pedro López', 180.00, DATE '2025-08-22', 3);
+
+-- ==============================================
 -- Inserts para tabla movie_plays_in
 -- ==============================================
 INSERT INTO movie_plays_in (hall_id, movie_id)
