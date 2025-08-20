@@ -1,15 +1,3 @@
--- Schema para MyKino-Bend (PostgreSQL - Render)
--- Este archivo se ejecutará en Render con PostgreSQL
-
--- Eliminar constrains y tablas si existen para recrearlas
-DROP TABLE IF EXISTS movie_plays_in CASCADE;
-DROP TABLE IF EXISTS bill CASCADE;
-DROP TABLE IF EXISTS seat CASCADE;
-DROP TABLE IF EXISTS hall CASCADE;
-DROP TABLE IF EXISTS cinema CASCADE;
-DROP TABLE IF EXISTS customer CASCADE;
-DROP TABLE IF EXISTS movie CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
 
 -- Crear tabla movie
 CREATE TABLE movie (
