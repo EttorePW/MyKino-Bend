@@ -40,6 +40,10 @@ public class MovieService {
         movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
         return respMovieDTOList;
     }
+    
+    public int getMovieCount() {
+        return (int) movieRepository.count();
+    }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
         if (controllMethod(newMovieDTO)) {
