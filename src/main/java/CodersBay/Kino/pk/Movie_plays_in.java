@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "movie_plays_in")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-
 @IdClass(Movie_plays_in_PK.class)
 public class Movie_plays_in {
 

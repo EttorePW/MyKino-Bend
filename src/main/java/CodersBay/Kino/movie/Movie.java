@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "movie")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
