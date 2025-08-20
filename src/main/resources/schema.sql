@@ -1,0 +1,91 @@
+-- Schema para MyKino-Bend
+-- Este archivo se ejecutará antes que data.sql
+
+-- Eliminar constrains y tablas si existen para recrearlas
+DROP TABLE IF EXISTS movie_plays_in CASCADE;
+DROP TABLE IF EXISTS seat CASCADE;
+DROP TABLE IF EXISTS hall CASCADE;
+DROP TABLE IF EXISTS cinema CASCADE;
+DROP TABLE IF EXISTS customer CASCADE;
+DROP TABLE IF EXISTS movie CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- Crear tabla movie
+CREATE TABLE movie (
+    movie_id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255),
+    main_character VARCHAR(255),
+    description TEXT,
+    premiered_at DATE,
+    movie_version VARCHAR(50),
+    image VARCHAR(255),
+    image_bkd VARCHAR(255),
+    video_id VARCHAR(255)
+);
+
+-- Crear tabla customer
+CREATE TABLE customer (
+    customer_id BIGSERIAL PRIMARY KEY,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    address VARCHAR(255),
+    an_adult BOOLEAN DEFAULT FALSE
+);
+
+-- Crear tabla users
+CREATE TABLE users (
+    user_id BIGSERIAL PRIMARY KEY,
+    user_first_name VARCHAR(255),
+    user_last_name VARCHAR(255),
+    user_email VARCHAR(255),
+    user_password VARCHAR(255),
+    confirm_password VARCHAR(255)
+);
+
+-- Crear tabla cinema
+CREATE TABLE cinema (
+    cinema_id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    manager VARCHAR(255),
+    max_halls INTEGER
+);
+
+-- Crear tabla hall
+CREATE TABLE hall (
+    hall_id BIGSERIAL PRIMARY KEY,
+    capacity INTEGER,
+    occupied_seats INTEGER,
+    supported_movie_version VARCHAR(50),
+    seat_price DECIMAL(10,2),
+    cinema_id BIGINT,
+    CONSTRAINT fk_hall_cinema FOREIGN KEY (cinema_id) REFERENCES cinema(cinema_id)
+);
+
+-- Crear tabla seat
+CREATE TABLE seat (
+    seat_id BIGSERIAL PRIMARY KEY,
+    cinema_name VARCHAR(255),
+    hall_id INTEGER,
+    movie_id INTEGER,
+    movie_version VARCHAR(50),
+    movie_name VARCHAR(255),
+    col_number INTEGER,
+    row_number INTEGER,
+    reservation_date VARCHAR(50),
+    reservation_time VARCHAR(50),
+    premiered_at DATE,
+    customer_id BIGINT,
+    CONSTRAINT fk_seat_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+);
+
+-- Crear tabla movie_plays_in (relación many-to-many)
+CREATE TABLE movie_plays_in (
+    hall_id BIGINT NOT NULL,
+    movie_id BIGINT NOT NULL,
+    PRIMARY KEY (hall_id, movie_id),
+    CONSTRAINT fk_mpi_hall FOREIGN KEY (hall_id) REFERENCES hall(hall_id),
+    CONSTRAINT fk_mpi_movie FOREIGN KEY (movie_id) REFERENCES movie(movie_id)
+);
