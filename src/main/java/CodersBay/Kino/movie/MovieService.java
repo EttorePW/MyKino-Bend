@@ -99,15 +99,40 @@ public class MovieService {
     public List<RespHallDTO> getHallsList(Movie movie) {
         List<RespHallDTO> hallList = new ArrayList<>();
         try {
+            if (movie == null || movie.getMovieId() == null) {
+                System.err.println("Movie or movieId is null");
+                return hallList;
+            }
+            
             // Obtener las salas directamente usando una consulta más simple
             List<Long> hallIds = moviePlaysInRepository.findHallIdsByMovieId(movie.getMovieId());
+            if (hallIds == null || hallIds.isEmpty()) {
+                System.err.println("No hall IDs found for movie " + movie.getMovieId());
+                return hallList;
+            }
+            
             List<Hall> halls = hallRepository.findByHallIdIn(hallIds);
+            if (halls == null || halls.isEmpty()) {
+                System.err.println("No halls found for hall IDs: " + hallIds);
+                return hallList;
+            }
+            
             hallList = halls.stream()
-                .map(hall -> hallService.convertToRespHallDTO(hall))
+                .filter(hall -> hall != null) // Filtrar halls nulos
+                .map(hall -> {
+                    try {
+                        return hallService.convertToRespHallDTO(hall);
+                    } catch (Exception e) {
+                        System.err.println("Error converting hall " + hall.getHallId() + " to DTO: " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(dto -> dto != null) // Filtrar DTOs nulos
                 .toList();
+                
         } catch (Exception e) {
             // Log del error y devolver lista vacía en caso de fallo
-            System.err.println("Error getting halls for movie " + movie.getMovieId() + ": " + e.getMessage());
+            System.err.println("Error getting halls for movie " + (movie != null ? movie.getMovieId() : "null") + ": " + e.getMessage());
             e.printStackTrace();
         }
         return hallList;
