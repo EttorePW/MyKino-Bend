@@ -54,36 +54,31 @@ public class HallService {
                        newHallDTO.getScreeningTimes() != null ? newHallDTO.getScreeningTimes().size() : 0,
                        newHallDTO.getScreeningTimes());
             
-            // Asegurar que la lista de screeningTimes no es null y está inicializada
-            if (newHallDTO.getScreeningTimes() != null && !newHallDTO.getScreeningTimes().isEmpty()) {
-                hall.getScreeningTimes().clear();
-                hall.getScreeningTimes().addAll(newHallDTO.getScreeningTimes());
-            }
-            
-            // Guardar el hall - esto debería persistir automáticamente los screeningTimes por @ElementCollection
+            // Guardar el hall PRIMERO sin los screeningTimes para obtener el ID
             Hall savedHall = hallRepository.save(hall);
-            logger.info("Hall saved with ID: {}, screeningTimes count: {}", 
-                       savedHall.getHallId(), 
-                       savedHall.getScreeningTimes() != null ? savedHall.getScreeningTimes().size() : 0);
+            logger.info("Hall saved with ID: {}", savedHall.getHallId());
             
-            // Verificar si los screeningTimes se guardaron correctamente
-            // Si no, usar inserción manual como fallback
+            // SIEMPRE insertar screening times manualmente para asegurar que se guarden
             if (newHallDTO.getScreeningTimes() != null && !newHallDTO.getScreeningTimes().isEmpty()) {
-                try {
-                    // Esperar un momento para que JPA termine de procesar
-                    Thread.sleep(100);
-                    
-                    if (!hallScreeningTimeService.hasScreeningTimes(savedHall.getHallId())) {
-                        logger.warn("ElementCollection did not save screening times for hall {}. Using manual insertion as fallback.", savedHall.getHallId());
-                        int inserted = hallScreeningTimeService.insertScreeningTimes(savedHall.getHallId(), newHallDTO.getScreeningTimes());
-                        logger.info("Manually inserted {} screening times for hall {}", inserted, savedHall.getHallId());
-                    } else {
-                        logger.info("ElementCollection successfully saved screening times for hall {}", savedHall.getHallId());
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    logger.error("Thread interrupted while checking screening times: {}", e.getMessage());
+                logger.info("Inserting {} screening times manually for hall {}: {}", 
+                           newHallDTO.getScreeningTimes().size(), 
+                           savedHall.getHallId(),
+                           newHallDTO.getScreeningTimes());
+                           
+                int inserted = hallScreeningTimeService.insertScreeningTimes(
+                    savedHall.getHallId(), 
+                    newHallDTO.getScreeningTimes()
+                );
+                
+                if (inserted > 0) {
+                    logger.info("✅ Successfully inserted {} screening times for hall {}", inserted, savedHall.getHallId());
+                } else {
+                    logger.error("❌ Failed to insert screening times for hall {}", savedHall.getHallId());
                 }
+                
+                // Verificar que se insertaron correctamente
+                boolean hasScreeningTimes = hallScreeningTimeService.hasScreeningTimes(savedHall.getHallId());
+                logger.info("Verification: Hall {} has screening times: {}", savedHall.getHallId(), hasScreeningTimes);
             }
             
             return convertToRespHallDTO(savedHall);

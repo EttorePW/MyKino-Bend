@@ -59,34 +59,64 @@ public class HallScreeningTimeService {
      */
     public int insertScreeningTimes(Long hallId, List<String> screeningTimes) {
         if (screeningTimes == null || screeningTimes.isEmpty()) {
+            System.out.println("[DEBUG] No screening times to insert for hall " + hallId);
             return 0;
         }
         
-        String sql = "INSERT INTO hall_screening_times (hall_id, screening_time) VALUES (?, ?)";
+        System.out.println("[DEBUG] Starting insertion of " + screeningTimes.size() + " screening times for hall " + hallId);
+        System.out.println("[DEBUG] Screening times to insert: " + screeningTimes);
+        
+        // Primero limpiar screening times existentes para este hall
+        String deleteSql = "DELETE FROM hall_screening_times WHERE hall_id = ?";
+        String insertSql = "INSERT INTO hall_screening_times (hall_id, screening_time) VALUES (?, ?)";
         int totalInserted = 0;
         
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection()) {
+            // Auto-commit en false para manejar transacción manualmente
+            conn.setAutoCommit(false);
             
-            for (String screeningTime : screeningTimes) {
-                if (screeningTime != null && !screeningTime.trim().isEmpty()) {
-                    pstmt.setLong(1, hallId);
-                    pstmt.setString(2, screeningTime.trim());
-                    pstmt.addBatch();
+            try {
+                // Limpiar screening times existentes
+                try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+                    deleteStmt.setLong(1, hallId);
+                    int deletedRows = deleteStmt.executeUpdate();
+                    System.out.println("[DEBUG] Deleted " + deletedRows + " existing screening times for hall " + hallId);
                 }
-            }
-            
-            int[] results = pstmt.executeBatch();
-            for (int result : results) {
-                if (result > 0) {
-                    totalInserted++;
+                
+                // Insertar nuevos screening times
+                try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                    for (String screeningTime : screeningTimes) {
+                        if (screeningTime != null && !screeningTime.trim().isEmpty()) {
+                            insertStmt.setLong(1, hallId);
+                            insertStmt.setString(2, screeningTime.trim());
+                            insertStmt.addBatch();
+                            System.out.println("[DEBUG] Added to batch: hall_id=" + hallId + ", screening_time='" + screeningTime.trim() + "'");
+                        }
+                    }
+                    
+                    int[] results = insertStmt.executeBatch();
+                    for (int result : results) {
+                        if (result > 0) {
+                            totalInserted++;
+                        }
+                    }
                 }
+                
+                // Commit la transacción
+                conn.commit();
+                System.out.println("[SUCCESS] ✅ Successfully inserted " + totalInserted + " screening times for hall " + hallId);
+                
+            } catch (SQLException e) {
+                // Rollback en caso de error
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
             }
-            
-            System.out.println("Successfully inserted " + totalInserted + " screening times for hall " + hallId);
             
         } catch (SQLException e) {
-            System.err.println("Error inserting screening times for hall " + hallId + ": " + e.getMessage());
+            System.err.println("[ERROR] ❌ Error inserting screening times for hall " + hallId + ": " + e.getMessage());
+            e.printStackTrace();
         }
         
         return totalInserted;
