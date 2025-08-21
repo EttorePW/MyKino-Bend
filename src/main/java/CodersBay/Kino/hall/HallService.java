@@ -54,32 +54,20 @@ public class HallService {
                        newHallDTO.getScreeningTimes() != null ? newHallDTO.getScreeningTimes().size() : 0,
                        newHallDTO.getScreeningTimes());
             
-            // Guardar el hall PRIMERO sin los screeningTimes para obtener el ID
-            Hall savedHall = hallRepository.save(hall);
-            logger.info("Hall saved with ID: {}", savedHall.getHallId());
-            
-            // SIEMPRE insertar screening times manualmente para asegurar que se guarden
-            if (newHallDTO.getScreeningTimes() != null && !newHallDTO.getScreeningTimes().isEmpty()) {
-                logger.info("Inserting {} screening times manually for hall {}: {}", 
-                           newHallDTO.getScreeningTimes().size(), 
-                           savedHall.getHallId(),
+            // Asegurar que los screening times están asignados correctamente
+            if (newHallDTO.getScreeningTimes() != null) {
+                hall.setScreeningTimes(new ArrayList<>(newHallDTO.getScreeningTimes()));
+                logger.info("Setting {} screening times for hall: {}", 
+                           newHallDTO.getScreeningTimes().size(),
                            newHallDTO.getScreeningTimes());
-                           
-                int inserted = hallScreeningTimeService.insertScreeningTimes(
-                    savedHall.getHallId(), 
-                    newHallDTO.getScreeningTimes()
-                );
-                
-                if (inserted > 0) {
-                    logger.info("✅ Successfully inserted {} screening times for hall {}", inserted, savedHall.getHallId());
-                } else {
-                    logger.error("❌ Failed to insert screening times for hall {}", savedHall.getHallId());
-                }
-                
-                // Verificar que se insertaron correctamente
-                boolean hasScreeningTimes = hallScreeningTimeService.hasScreeningTimes(savedHall.getHallId());
-                logger.info("Verification: Hall {} has screening times: {}", savedHall.getHallId(), hasScreeningTimes);
             }
+            
+            // Guardar el hall con screening times en la columna JSON
+            Hall savedHall = hallRepository.save(hall);
+            logger.info("✅ Hall saved with ID: {}, screening times count: {}", 
+                       savedHall.getHallId(), 
+                       savedHall.getScreeningTimes() != null ? savedHall.getScreeningTimes().size() : 0);
+            logger.info("Saved screening times: {}", savedHall.getScreeningTimes());
             
             return convertToRespHallDTO(savedHall);
         }
@@ -96,14 +84,13 @@ public class HallService {
     }
 
     public RespHallDTO convertToRespHallDTO(Hall hall) {
-        // Obtener screeningTimes desde la base de datos usando el nuevo servicio
-        List<String> screeningTimes = new ArrayList<>();
-        try {
-            screeningTimes = hallScreeningTimeService.getScreeningTimes(hall.getHallId());
-            logger.info("Fetched {} screening times for hall {}", screeningTimes.size(), hall.getHallId());
-        } catch (Exception e) {
-            logger.error("Error fetching screening times for hall {}: {}", hall.getHallId(), e.getMessage());
-        }
+        // Ahora usamos directamente los screening times de la entidad (columna JSON)
+        List<String> screeningTimes = hall.getScreeningTimes() != null ? 
+                                     new ArrayList<>(hall.getScreeningTimes()) : 
+                                     new ArrayList<>();
+        
+        logger.info("Converting hall {} with {} screening times: {}", 
+                   hall.getHallId(), screeningTimes.size(), screeningTimes);
         
         return RespHallDTO.builder()
                 .hallId(hall.getHallId())
@@ -112,7 +99,7 @@ public class HallService {
                 .supportedMovieVersion(hall.getSupportedMovieVersion())
                 .seatPrice(hall.getSeatPrice())
                 .cinemaDTO(convertToRespCinemaDTO(hall.getCinema()))
-                .screeningTimes(screeningTimes) // Usar los datos obtenidos de la base de datos
+                .screeningTimes(screeningTimes) // Usar directamente de la entidad
                 .build();
     }
 
