@@ -21,6 +21,12 @@ public class DatabaseConfig {
         
         System.out.println("[DEBUG] DATABASE_URL: " + databaseUrl);
         
+        // Handle both postgres:// and postgresql:// formats
+        if (databaseUrl != null && databaseUrl.startsWith("postgres://")) {
+            databaseUrl = databaseUrl.replace("postgres://", "postgresql://");
+            System.out.println("[DEBUG] Converted postgres:// to postgresql://");
+        }
+        
         if (databaseUrl != null && databaseUrl.startsWith("postgresql://")) {
             try {
                 URI dbUri = new URI(databaseUrl);
@@ -35,7 +41,7 @@ public class DatabaseConfig {
                     port = 5432;
                 }
                 
-                String jdbcUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath();
+                String jdbcUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath() + "?sslmode=require";
                 
                 System.out.println("[DEBUG] Converted JDBC URL: " + jdbcUrl);
                 System.out.println("[DEBUG] Username: " + username);

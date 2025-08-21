@@ -13,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "hall")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,22 +29,25 @@ public class Hall {
    private MovieVersion supportedMovieVersion;
    private double seatPrice;
    @ManyToOne
-   @JoinColumn(name = "cinemaId")
+   @JoinColumn(name = "cinema_id")
    private Cinema cinema;
    @ElementCollection
    @CollectionTable(name = "hall_screening_times", joinColumns = @JoinColumn(name = "hall_id"))
    @Column(name = "screening_time")
+   @Builder.Default
    private List<String> screeningTimes = new ArrayList<>();
+   
    @OneToMany(mappedBy = "hall",cascade = CascadeType.ALL, orphanRemoval = true)
+   @Builder.Default
    private List<Movie_plays_in> moviePlaysInList = new ArrayList<>();
 
 
-   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion,double seatPrice, Cinema cinema, List<String> screeningTimes) {
+   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion, double seatPrice, Cinema cinema, List<String> screeningTimes) {
       this.capacity = capacity;
       this.occupiedSeats = occupiedSeats;
       this.supportedMovieVersion = supportedMovieVersion;
       this.seatPrice = seatPrice;
       this.cinema = cinema;
-      this.screeningTimes = screeningTimes;
+      this.screeningTimes = screeningTimes != null ? screeningTimes : new ArrayList<>();
    }
 }

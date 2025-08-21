@@ -40,6 +40,10 @@ public class MovieService {
         movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
         return respMovieDTOList;
     }
+    
+    public int getMovieCount() {
+        return (int) movieRepository.count();
+    }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
         if (controllMethod(newMovieDTO)) {
@@ -93,9 +97,19 @@ public class MovieService {
     }
 
     public List<RespHallDTO> getHallsList(Movie movie) {
-        List<RespHallDTO> hallList;
-        Movie findedMovie = movieRepository.findById(movie.getMovieId()).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+movie.getMovieId()));
-        hallList = findedMovie.getMoviePlaysInList().stream().map(mpi -> hallService.convertToRespHallDTO(mpi.getHall())).toList();
+        List<RespHallDTO> hallList = new ArrayList<>();
+        try {
+            // Obtener las salas directamente usando una consulta más simple
+            List<Long> hallIds = moviePlaysInRepository.findHallIdsByMovieId(movie.getMovieId());
+            List<Hall> halls = hallRepository.findByHallIdIn(hallIds);
+            hallList = halls.stream()
+                .map(hall -> hallService.convertToRespHallDTO(hall))
+                .toList();
+        } catch (Exception e) {
+            // Log del error y devolver lista vacía en caso de fallo
+            System.err.println("Error getting halls for movie " + movie.getMovieId() + ": " + e.getMessage());
+            e.printStackTrace();
+        }
         return hallList;
     }
 
