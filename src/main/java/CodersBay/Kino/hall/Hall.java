@@ -48,6 +48,7 @@ public class Hall {
       this.supportedMovieVersion = supportedMovieVersion;
       this.seatPrice = seatPrice;
       this.cinema = cinema;
-      this.screeningTimes = screeningTimes != null ? screeningTimes : new ArrayList<>();
+      this.screeningTimes = screeningTimes != null ? new ArrayList<>(screeningTimes) : new ArrayList<>();
+      this.moviePlaysInList = new ArrayList<>();
    }
 }

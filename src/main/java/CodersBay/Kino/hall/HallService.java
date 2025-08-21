@@ -40,46 +40,92 @@ public class HallService {
 
     @Transactional
     public RespHallDTO createNewHall(NewHallDTO newHallDTO) {
-        if (controllMethod(newHallDTO)) {
-            throw new CheckPropertiesException("Please check the syntax from your properties, you may have an error ");
-        }
-
-        Cinema cinema = cinemaRepository.findById(newHallDTO.getCinemaId()).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+newHallDTO.getCinemaId()));
-        if(cinema.getHallsList().toArray().length < cinema.getMaxHalls() || cinema.getHallsList().isEmpty()) {
-            // Crear el hall con los datos básicos primero
-            Hall hall = new Hall(newHallDTO.getCapacity(), newHallDTO.getOccupiedSeats(), newHallDTO.getSupportedMovieVersion(),newHallDTO.getSeatPrice(),cinemaRepository.findById(newHallDTO.getCinemaId()).orElseThrow(()-> new NotFoundException("Cinema could not been found","/api/cinema"+newHallDTO.getCinemaId())),newHallDTO.getScreeningTimes());
+        try {
+            logger.info("Starting to create hall with DTO: {}", newHallDTO);
             
-            // Log para debugging
-            logger.info("Creating hall with {} screening times: {}", 
-                       newHallDTO.getScreeningTimes() != null ? newHallDTO.getScreeningTimes().size() : 0,
-                       newHallDTO.getScreeningTimes());
-            
-            // Asegurar que los screening times están asignados correctamente
-            if (newHallDTO.getScreeningTimes() != null) {
-                hall.setScreeningTimes(new ArrayList<>(newHallDTO.getScreeningTimes()));
-                logger.info("Setting {} screening times for hall: {}", 
-                           newHallDTO.getScreeningTimes().size(),
-                           newHallDTO.getScreeningTimes());
+            if (controllMethod(newHallDTO)) {
+                logger.error("DTO validation failed for: {}", newHallDTO);
+                throw new CheckPropertiesException("Please check the syntax from your properties, you may have an error ");
             }
-            
-            // Guardar el hall con screening times en la columna JSON
-            Hall savedHall = hallRepository.save(hall);
-            logger.info("✅ Hall saved with ID: {}, screening times count: {}", 
-                       savedHall.getHallId(), 
-                       savedHall.getScreeningTimes() != null ? savedHall.getScreeningTimes().size() : 0);
-            logger.info("Saved screening times: {}", savedHall.getScreeningTimes());
-            
-            return convertToRespHallDTO(savedHall);
-        }
-        throw new IsNotPossibleBeacauseMaxHallsIsReached("The cinema has already to many Halls");
 
+            logger.info("Looking for cinema with ID: {}", newHallDTO.getCinemaId());
+            Cinema cinema = cinemaRepository.findById(newHallDTO.getCinemaId())
+                .orElseThrow(() -> {
+                    logger.error("Cinema not found with ID: {}", newHallDTO.getCinemaId());
+                    return new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+newHallDTO.getCinemaId());
+                });
+            
+            logger.info("Cinema found: {} with {} halls (max: {})", 
+                       cinema.getName(), 
+                       cinema.getHallsList().size(), 
+                       cinema.getMaxHalls());
+            
+            if(cinema.getHallsList().size() < cinema.getMaxHalls() || cinema.getHallsList().isEmpty()) {
+                logger.info("Creating hall with capacity: {}, price: {}, version: {}", 
+                           newHallDTO.getCapacity(), 
+                           newHallDTO.getSeatPrice(), 
+                           newHallDTO.getSupportedMovieVersion());
+                
+                // Crear el hall con los datos básicos
+                Hall hall = new Hall(
+                    newHallDTO.getCapacity(), 
+                    newHallDTO.getOccupiedSeats(), 
+                    newHallDTO.getSupportedMovieVersion(),
+                    newHallDTO.getSeatPrice(),
+                    cinema,
+                    newHallDTO.getScreeningTimes()
+                );
+                
+                logger.info("Hall created in memory with {} screening times", 
+                           hall.getScreeningTimes() != null ? hall.getScreeningTimes().size() : 0);
+                
+                // Guardar el hall
+                logger.info("Saving hall to database...");
+                Hall savedHall = hallRepository.save(hall);
+                logger.info("✅ Hall saved with ID: {}", savedHall.getHallId());
+                
+                // Convertir a DTO
+                logger.info("Converting hall to response DTO...");
+                RespHallDTO respHallDTO = convertToRespHallDTO(savedHall);
+                logger.info("✅ Hall DTO created successfully");
+                
+                return respHallDTO;
+            } else {
+                logger.error("Cinema {} already has maximum halls ({}/{})", 
+                           cinema.getName(), cinema.getHallsList().size(), cinema.getMaxHalls());
+                throw new IsNotPossibleBeacauseMaxHallsIsReached("The cinema has already too many Halls");
+            }
+        } catch (Exception e) {
+            logger.error("Error creating hall: {}", e.getMessage(), e);
+            throw e; // Re-throw to let Spring handle it
+        }
     }
     private boolean controllMethod(NewHallDTO newHallDTO) {
-        if (newHallDTO.getCapacity() == 0
-                || newHallDTO.getSupportedMovieVersion() == null
-                || newHallDTO.getCinemaId() == 0 ){
+        if (newHallDTO == null) {
+            logger.error("NewHallDTO is null");
             return true;
         }
+        
+        if (newHallDTO.getCapacity() <= 0) {
+            logger.error("Invalid capacity: {}", newHallDTO.getCapacity());
+            return true;
+        }
+        
+        if (newHallDTO.getSupportedMovieVersion() == null) {
+            logger.error("MovieVersion is null");
+            return true;
+        }
+        
+        if (newHallDTO.getCinemaId() == null || newHallDTO.getCinemaId() <= 0) {
+            logger.error("Invalid cinemaId: {}", newHallDTO.getCinemaId());
+            return true;
+        }
+        
+        if (newHallDTO.getSeatPrice() < 0) {
+            logger.error("Invalid seat price: {}", newHallDTO.getSeatPrice());
+            return true;
+        }
+        
         return false;
     }
 
