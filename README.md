@@ -10,14 +10,13 @@ API REST para el sistema de gestión de cines MyKino, desarrollada con Spring Bo
 - **🏛️ Gestión de Salas**: Configuración de salas y capacidades
 - **🪑 Sistema de Reservas**: Reserva de asientos en tiempo real
 - **💰 Facturación**: Sistema completo de tickets y pagos
-- **👥 Gestión de Usuarios**: Autenticación y autorización
+- **👥 Gestión de Usuarios**: Gestión de perfiles de usuario
 - **📧 Notificaciones**: Envío de confirmaciones por email
 
 ### 📊 Características Técnicas
 - **🔄 API REST**: Endpoints RESTful bien estructurados
 - **📖 Documentación**: Swagger UI integrado
 - **🗄️ Base de datos**: Soporte para H2 (desarrollo) y PostgreSQL (producción)
-- **🔒 Seguridad**: Spring Security (comentado, listo para activar)
 - **✉️ Email**: Integración con Gmail SMTP
 - **🧪 Testing**: Framework de testing incluido
 
@@ -119,10 +118,6 @@ PORT=8080
 EMAIL_USERNAME=tu-email@gmail.com
 EMAIL_PASSWORD=tu-app-password
 
-# Seguridad
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=tu-contraseña-segura
-
 # Frontend URL para CORS
 FRONTEND_URL=https://tu-frontend.netlify.app
 ```
@@ -170,21 +165,6 @@ GET    /api/users           # Listar usuarios
 POST   /api/users           # Registrar usuario
 ```
 
-## 🔒 Seguridad
-
-El proyecto incluye Spring Security configurado pero comentado. Para activarlo:
-
-1. Descomenta las dependencias de Security y JWT en `pom.xml`
-2. Configura los beans de seguridad
-3. Implementa autenticación JWT
-
-```xml
-<!-- Descomentar en pom.xml -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>
-```
 
 ## 🧪 Testing
 
