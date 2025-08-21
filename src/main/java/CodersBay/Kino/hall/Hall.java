@@ -31,7 +31,7 @@ public class Hall {
    @ManyToOne
    @JoinColumn(name = "cinema_id")
    private Cinema cinema;
-   @ElementCollection
+   @ElementCollection(fetch = FetchType.EAGER)
    @CollectionTable(name = "hall_screening_times", joinColumns = @JoinColumn(name = "hall_id"))
    @Column(name = "screening_time")
    @Builder.Default

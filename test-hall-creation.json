@@ -1,0 +1,13 @@
+{
+  "capacity": 150,
+  "occupiedSeats": 0,
+  "supportedMovieVersion": "D2D",
+  "seatPrice": 12.50,
+  "cinemaId": 1,
+  "screeningTimes": [
+    "14:00",
+    "16:30",
+    "19:00",
+    "21:30"
+  ]
+}
