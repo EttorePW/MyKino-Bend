@@ -52,7 +52,7 @@ public class HallDebugController {
                 Hall testHall = new Hall(
                     100, // capacity
                     0,   // occupiedSeats
-                    MovieVersion.R2D, // supportedMovieVersion
+                    MovieVersion.D2D, // supportedMovieVersion
                     12.50, // seatPrice
                     cinema,
                     testScreeningTimes
