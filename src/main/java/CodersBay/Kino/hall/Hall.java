@@ -30,6 +30,9 @@ public class Hall {
    @ManyToOne
    @JoinColumn(name = "cinemaId")
    private Cinema cinema;
+   @ElementCollection
+   @CollectionTable(name = "hall_screening_times", joinColumns = @JoinColumn(name = "hall_id"))
+   @Column(name = "screening_time")
    private List<String> screeningTimes = new ArrayList<>();
    @OneToMany(mappedBy = "hall",cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Movie_plays_in> moviePlaysInList = new ArrayList<>();
