@@ -20,9 +20,13 @@ public class StringArrayConverter implements AttributeConverter<List<String>, St
         }
         
         try {
-            return objectMapper.writeValueAsString(attribute);
+            // Para PostgreSQL JSONB, aseguramos que sea un JSON válido
+            String jsonString = objectMapper.writeValueAsString(attribute);
+            System.out.println("[DEBUG] Converting to DB: " + jsonString);
+            return jsonString;
         } catch (JsonProcessingException e) {
             System.err.println("Error converting list to JSON: " + e.getMessage());
+            e.printStackTrace();
             return "[]";
         }
     }
@@ -34,9 +38,11 @@ public class StringArrayConverter implements AttributeConverter<List<String>, St
         }
         
         try {
+            System.out.println("[DEBUG] Converting from DB: " + dbData);
             return objectMapper.readValue(dbData, new TypeReference<List<String>>() {});
         } catch (JsonProcessingException e) {
             System.err.println("Error converting JSON to list: " + e.getMessage());
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }

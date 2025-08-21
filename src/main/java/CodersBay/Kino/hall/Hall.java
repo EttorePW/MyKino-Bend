@@ -32,7 +32,7 @@ public class Hall {
    @JoinColumn(name = "cinema_id")
    private Cinema cinema;
    // ScreeningTimes como JSON en PostgreSQL
-   @Column(name = "screening_times", columnDefinition = "jsonb")
+   @Column(name = "screening_times", columnDefinition = "TEXT")
    @Convert(converter = StringArrayConverter.class)
    @Builder.Default
    private List<String> screeningTimes = new ArrayList<>();
