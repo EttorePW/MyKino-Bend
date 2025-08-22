@@ -9,4 +9,6 @@ import java.util.List;
 public interface MoviePlaysInRepository extends JpaRepository<Movie_plays_in, Movie_plays_in_PK> {
     void deleteMovie_plays_inByMovie_MovieId(Long id);
     List<Movie_plays_in> findByMovie_MovieId(Long movieId);
+
+    List<Long> findHallIdsByMovieId(Long movieId);
 }
