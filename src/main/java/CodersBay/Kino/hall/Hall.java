@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hall")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -29,26 +27,21 @@ public class Hall {
    private MovieVersion supportedMovieVersion;
    private double seatPrice;
    @ManyToOne
-   @JoinColumn(name = "cinema_id")
+   @JoinColumn(name = "cinemaId")
    private Cinema cinema;
-   // ScreeningTimes como JSON en PostgreSQL
-   @Column(name = "screening_times", columnDefinition = "TEXT")
-   @Convert(converter = StringArrayConverter.class)
-   @Builder.Default
+   @Convert(converter = StringListConverter.class)
+   @Column(columnDefinition = "TEXT")
    private List<String> screeningTimes = new ArrayList<>();
-   
    @OneToMany(mappedBy = "hall",cascade = CascadeType.ALL, orphanRemoval = true)
-   @Builder.Default
    private List<Movie_plays_in> moviePlaysInList = new ArrayList<>();
 
 
-   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion, double seatPrice, Cinema cinema, List<String> screeningTimes) {
+   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion,double seatPrice, Cinema cinema, List<String> screeningTimes) {
       this.capacity = capacity;
       this.occupiedSeats = occupiedSeats;
       this.supportedMovieVersion = supportedMovieVersion;
       this.seatPrice = seatPrice;
       this.cinema = cinema;
-      this.screeningTimes = screeningTimes != null ? new ArrayList<>(screeningTimes) : new ArrayList<>();
-      this.moviePlaysInList = new ArrayList<>();
+      this.screeningTimes = screeningTimes;
    }
 }

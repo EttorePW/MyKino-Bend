@@ -1,234 +1,164 @@
-# 🎬 MyKino - Backend API
+# MyKino Backend - Spring Boot API
 
-API REST para el sistema de gestión de cines MyKino, desarrollada con Spring Boot y Java. Proporciona todos los endpoints necesarios para la gestión completa de cines, películas, salas, reservas y facturación.
+## 📋 Description
+Backend API for MyKino cinema management system built with Spring Boot 3.5.4 and PostgreSQL.
 
-## 🚀 Características Principales
+## 🚀 Features
+- RESTful API for cinema management
+- PostgreSQL database integration
+- Email notifications
+- Swagger/OpenAPI documentation
+- Docker support
+- Render deployment ready
 
-### 🎯 Funcionalidades Core
-- **🎭 Gestión de Películas**: CRUD completo con información detallada
-- **🏢 Gestión de Cines**: Administración de múltiples ubicaciones
-- **🏛️ Gestión de Salas**: Configuración de salas y capacidades
-- **🪑 Sistema de Reservas**: Reserva de asientos en tiempo real
-- **💰 Facturación**: Sistema completo de tickets y pagos
-- **👥 Gestión de Usuarios**: Gestión de perfiles de usuario
-- **📧 Notificaciones**: Envío de confirmaciones por email
-
-### 📊 Características Técnicas
-- **🔄 API REST**: Endpoints RESTful bien estructurados
-- **📖 Documentación**: Swagger UI integrado
-- **🗄️ Base de datos**: Soporte para H2 (desarrollo) y PostgreSQL (producción)
-- **✉️ Email**: Integración con Gmail SMTP
-- **🧪 Testing**: Framework de testing incluido
-
-## 🛠️ Tecnologías Utilizadas
-
-- **Framework**: Spring Boot 3.5.4
-- **Lenguaje**: Java 21
+## 🛠️ Technology Stack
+- **Java**: 21 (LTS)
+- **Spring Boot**: 3.5.4
+- **Database**: PostgreSQL (Production) / H2 (Development)
+- **ORM**: Spring Data JPA / Hibernate
+- **Documentation**: Swagger/OpenAPI
 - **Build Tool**: Maven
-- **ORM**: Spring Data JPA + Hibernate
-- **Base de Datos**: H2 (desarrollo) / PostgreSQL (producción)
-- **Documentación**: Swagger/OpenAPI 3
-- **Email**: Spring Mail
-- **Testing**: JUnit + Spring Boot Test
+- **Email**: Spring Mail (SMTP)
 
-## 📋 Requisitos Previos
-
-- **Java**: JDK 21 o superior
-- **Maven**: 3.8+ (o usar el wrapper incluido)
-- **PostgreSQL**: Para producción (opcional para desarrollo)
-
-## 🚀 Instalación y Configuración
-
-### 1. Clonar el repositorio
-```bash
-git clone <tu-repositorio>
-cd MyKino-Bend
+## 📁 Project Structure
+```
+src/
+├── main/
+│   ├── java/CodersBay/Kino/
+│   │   ├── cinema/          # Cinema management
+│   │   ├── movie/           # Movie management
+│   │   ├── hall/            # Hall management
+│   │   ├── seat/            # Seat management
+│   │   ├── customer/        # Customer management
+│   │   ├── user/            # User management
+│   │   ├── bills/           # Billing system
+│   │   ├── config/          # Configuration classes
+│   │   └── controllerExceptionhandler/  # Error handling
+│   └── resources/
+│       ├── application.properties           # Development config
+│       └── application-prod.properties     # Production config
 ```
 
-### 2. Compilar el proyecto
-```bash
-# Usar Maven wrapper (recomendado)
-./mvnw clean compile
+## 🏗️ API Endpoints
+- **Cinema**: `/api/cinema`
+- **Movies**: `/api/movie`
+- **Halls**: `/api/hall`
+- **Seats**: `/api/seats`
+- **Reservations**: `/api/reservations`
+- **Customers**: `/api/customers`
+- **Bills**: `/api/bill`
+- **Users**: `/api/users`
+- **Times**: `/api/times`
 
-# O si tienes Maven instalado
-mvn clean compile
-```
-
-### 3. Ejecutar en modo desarrollo
-```bash
-# Con Maven wrapper
-./mvnw spring-boot:run
-
-# O con Maven
-mvn spring-boot:run
-```
-
-La API estará disponible en: `http://localhost:8080`
-
-## 📦 Scripts Disponibles
-
-```bash
-# Compilar
-./mvnw clean compile
-
-# Ejecutar tests
-./mvnw test
-
-# Empaquetar (JAR)
-./mvnw clean package
-
-# Ejecutar aplicación
-./mvnw spring-boot:run
-
-# Limpiar proyecto
-./mvnw clean
-```
-
-## 🗄️ Configuración de Base de Datos
-
-### Desarrollo (H2)
-```properties
-# En application.properties (por defecto)
-spring.datasource.url=jdbc:h2:file:./data/kinoDB
-spring.h2.console.enabled=true
-# Consola H2: http://localhost:8080/h2-console
-```
-
-### Producción (PostgreSQL)
-```properties
-# En application-prod.properties
-spring.profiles.active=prod
-spring.datasource.url=${DATABASE_URL}
-spring.datasource.driver-class-name=org.postgresql.Driver
-```
-
-## 🔧 Configuración para Deploy en Render
-
-### Variables de Entorno Necesarias:
-```env
-# Base de Datos (Render las proporciona automáticamente)
-DATABASE_URL=postgresql://...
-DATABASE_USERNAME=usuario
-DATABASE_PASSWORD=contraseña
-
-# Configuración del servidor
-PORT=8080
-
-# Email
-EMAIL_USERNAME=tu-email@gmail.com
-EMAIL_PASSWORD=tu-app-password
-
-# Frontend URL para CORS
-FRONTEND_URL=https://tu-frontend.netlify.app
-```
-
-### Build Command para Render:
-```bash
-./mvnw clean package -DskipTests
-```
-
-### Start Command para Render:
-```bash
-java -Dspring.profiles.active=prod -jar target/Kino-0.0.1-SNAPSHOT.jar
-```
-
-## 📖 Documentación de la API
-
-Una vez ejecutando, la documentación interactiva está disponible en:
-
+## 📚 API Documentation
 - **Swagger UI**: `http://localhost:8080/swagger-ui.html`
 - **OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
 
-### Principales Endpoints:
+## 🔧 Setup & Installation
 
-```
-# Películas
-GET    /api/movies          # Listar películas
-POST   /api/movies          # Crear película
-PUT    /api/movies/{id}     # Actualizar película
-DELETE /api/movies/{id}     # Eliminar película
+### Prerequisites
+- Java 21 or higher
+- Maven 3.6+
+- PostgreSQL (for production)
 
-# Cines
-GET    /api/cinemas         # Listar cines
-POST   /api/cinemas         # Crear cine
+### Development Setup
+1. Clone the repository
+2. Navigate to the project directory
+3. Run with H2 database (development):
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+4. Access H2 Console: `http://localhost:8080/h2-console`
 
-# Salas
-GET    /api/halls           # Listar salas
-POST   /api/halls           # Crear sala
+### Production Setup
+1. Set up PostgreSQL database
+2. Configure environment variables:
+   ```bash
+   export DATABASE_URL=jdbc:postgresql://host:port/database
+   export DATABASE_USERNAME=your_username
+   export DATABASE_PASSWORD=your_password
+   ```
+3. Run with production profile:
+   ```bash
+   ./mvnw spring-boot:run -Dspring.profiles.active=prod
+   ```
 
-# Reservas
-GET    /api/reservations    # Listar reservas
-POST   /api/reservations    # Crear reserva
-
-# Usuarios
-GET    /api/users           # Listar usuarios
-POST   /api/users           # Registrar usuario
-```
-
-
-## 🧪 Testing
-
+## 🐳 Docker Support
+Build and run with Docker:
 ```bash
-# Ejecutar todos los tests
-./mvnw test
+# Build
+./mvnw clean package -DskipTests
+docker build -t mykino-backend .
 
-# Ejecutar tests con cobertura
-./mvnw test jacoco:report
-
-# Tests de integración
-./mvnw verify
+# Run
+docker run -p 8080:8080 \
+  -e DATABASE_URL=jdbc:postgresql://host:port/database \
+  -e DATABASE_USERNAME=username \
+  -e DATABASE_PASSWORD=password \
+  mykino-backend
 ```
 
-## 📧 Configuración de Email
+## ☁️ Deployment
 
-Para el envío de emails, configura:
+### Render Deployment
+1. Connect your GitHub repository to Render
+2. Create a new Web Service
+3. Configure build settings:
+   - **Build Command**: `./mvnw clean package -DskipTests`
+   - **Start Command**: `java -jar target/Kino-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod`
+4. Set environment variables:
+   - `DATABASE_URL`: Your PostgreSQL connection string
+   - `DATABASE_USERNAME`: Database username
+   - `DATABASE_PASSWORD`: Database password
+   - `SPRING_PROFILES_ACTIVE`: `prod`
 
-1. **Gmail App Password**: Genera una contraseña de aplicación
-2. **Variables de entorno**: Configura EMAIL_USERNAME y EMAIL_PASSWORD
-3. **SMTP**: Ya configurado para Gmail
+### Manual Build
+```bash
+# Clean and package
+./mvnw clean package -DskipTests
 
-## 🌐 CORS
-
-El CORS está configurado para permitir requests del frontend. Ajustar en `application-prod.properties`:
-
-```properties
-management.endpoints.web.cors.allowed-origins=${FRONTEND_URL}
+# Run the JAR
+java -jar target/Kino-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
+
+## 🌍 Environment Variables
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL connection URL | `jdbc:postgresql://localhost:5432/kinodb` |
+| `DATABASE_USERNAME` | Database username | `postgres` |
+| `DATABASE_PASSWORD` | Database password | `password` |
+| `EMAIL_USERNAME` | SMTP email username | `ettore.pw@gmail.com` |
+| `EMAIL_PASSWORD` | SMTP email password | - |
+| `PORT` | Server port | `8080` |
+
+## 🔍 Configuration Profiles
+- **Development** (`dev`): Uses H2 in-memory database
+- **Production** (`prod`): Uses PostgreSQL database
+
+## 📧 Email Configuration
+The application supports email notifications using Gmail SMTP:
+- Host: smtp.gmail.com
+- Port: 587
+- TLS enabled
 
 ## 🐛 Troubleshooting
 
-### Problemas Comunes:
+### Common Issues
+1. **Database Connection Failed**
+   - Check PostgreSQL is running
+   - Verify connection credentials
+   - Ensure database exists
 
-1. **Puerto en uso**: Cambiar puerto en `application.properties`
-2. **Java Version**: Verificar que usas Java 21
-3. **Database**: Verificar conexión a PostgreSQL en producción
-4. **CORS**: Verificar configuración para tu frontend
+2. **Port Already in Use**
+   - Change port in `application.properties`: `server.port=8081`
+   - Or set environment variable: `PORT=8081`
 
-## 🤝 Contribución
+3. **Build Failures**
+   - Ensure Java 21 is installed
+   - Run `./mvnw clean install -DskipTests`
 
-1. Fork el proyecto
-2. Crea una rama feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -m 'Añadir nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
+## 📞 Support
+For issues and questions, please check the API documentation at `/swagger-ui.html` or contact the development team.
 
-## 📝 Convenciones de Código
-
-- Usar **Lombok** para reducir boilerplate
-- **RESTful** naming para endpoints
-- **DTOs** para transferencia de datos
-- **Repository Pattern** para acceso a datos
-- **Service Layer** para lógica de negocio
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT.
-
-## 👨‍💻 Autor
-
-**CodersBay**
-- Proyecto Kino
-
----
-
-⭐ API documentada y lista para producción!
+## 📄 License
+This project is proprietary software developed for MyKino cinema management.

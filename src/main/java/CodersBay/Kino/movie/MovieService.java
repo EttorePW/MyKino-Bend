@@ -40,10 +40,6 @@ public class MovieService {
         movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
         return respMovieDTOList;
     }
-    
-    public int getMovieCount() {
-        return (int) movieRepository.count();
-    }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
         if (controllMethod(newMovieDTO)) {
@@ -97,44 +93,9 @@ public class MovieService {
     }
 
     public List<RespHallDTO> getHallsList(Movie movie) {
-        List<RespHallDTO> hallList = new ArrayList<>();
-        try {
-            if (movie == null || movie.getMovieId() == null) {
-                System.err.println("Movie or movieId is null");
-                return hallList;
-            }
-            
-            // Obtener las salas directamente usando una consulta más simple
-            List<Long> hallIds = moviePlaysInRepository.findHallIdsByMovieId(movie.getMovieId());
-            if (hallIds == null || hallIds.isEmpty()) {
-                System.err.println("No hall IDs found for movie " + movie.getMovieId());
-                return hallList;
-            }
-            
-            List<Hall> halls = hallRepository.findByHallIdIn(hallIds);
-            if (halls == null || halls.isEmpty()) {
-                System.err.println("No halls found for hall IDs: " + hallIds);
-                return hallList;
-            }
-            
-            hallList = halls.stream()
-                .filter(hall -> hall != null) // Filtrar halls nulos
-                .map(hall -> {
-                    try {
-                        return hallService.convertToRespHallDTO(hall);
-                    } catch (Exception e) {
-                        System.err.println("Error converting hall " + hall.getHallId() + " to DTO: " + e.getMessage());
-                        return null;
-                    }
-                })
-                .filter(dto -> dto != null) // Filtrar DTOs nulos
-                .toList();
-                
-        } catch (Exception e) {
-            // Log del error y devolver lista vacía en caso de fallo
-            System.err.println("Error getting halls for movie " + (movie != null ? movie.getMovieId() : "null") + ": " + e.getMessage());
-            e.printStackTrace();
-        }
+        List<RespHallDTO> hallList;
+        Movie findedMovie = movieRepository.findById(movie.getMovieId()).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+movie.getMovieId()));
+        hallList = findedMovie.getMoviePlaysInList().stream().map(mpi -> hallService.convertToRespHallDTO(mpi.getHall())).toList();
         return hallList;
     }
 

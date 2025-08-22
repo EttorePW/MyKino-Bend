@@ -9,21 +9,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "movie_plays_in")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+
 @IdClass(Movie_plays_in_PK.class)
 public class Movie_plays_in {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "hall_id")
+    @JoinColumn(name = "hallId")
     private Hall hall;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @JoinColumn(name = "movieId")
     private Movie movie;
 }

@@ -10,7 +10,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "cinema")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 
 
 @Entity
-@Table(name = "bill")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

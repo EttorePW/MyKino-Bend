@@ -24,16 +24,6 @@ public class MovieController {
     public ResponseEntity<List<RespMovieDTO>> getMovies(){
         return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
     }
-    
-    @GetMapping("/debug")
-    public ResponseEntity<String> debugMovies(){
-        try {
-            int movieCount = movieService.getMovieCount();
-            return new ResponseEntity<>("Total movies: " + movieCount, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
     @GetMapping("/{movieVersion}")
     public ResponseEntity<List<RespMovieDTO>> getMoviesByVersion(@PathVariable String movieVersion){
         return new ResponseEntity<>(movieService.getMoviesByMovieVersion(movieVersion), HttpStatus.OK);

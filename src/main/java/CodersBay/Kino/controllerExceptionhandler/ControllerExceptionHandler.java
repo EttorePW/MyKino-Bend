@@ -1,8 +1,6 @@
 package CodersBay.Kino.controllerExceptionhandler;
 
 import CodersBay.Kino.controllerExceptionhandler.customExeption.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.WebDataBinder;
@@ -19,8 +17,6 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
-    
-    private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
@@ -111,21 +107,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setDetail(e.getMessage());
         problem.setStatus(HttpStatus.BAD_REQUEST);
         problem .setProperty("TimeStamp", Instant.now().toString());
-        return problem;
-    }
-    
-    @ExceptionHandler(Exception.class)
-    public ProblemDetail handleGenericException(Exception e, WebRequest request) {
-        // Log the full stack trace for debugging
-        logger.error("Unexpected error occurred: ", e);
-        
-        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        problem.setTitle("Internal Server Error");
-        problem.setDetail("An unexpected error occurred: " + e.getMessage());
-        problem.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        problem.setProperty("TimeStamp", Instant.now().toString());
-        problem.setProperty("ExceptionType", e.getClass().getSimpleName());
-        
         return problem;
     }
 

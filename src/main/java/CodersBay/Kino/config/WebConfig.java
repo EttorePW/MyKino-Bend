@@ -8,17 +8,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins(
-                    "https://mykinoapp.netlify.app",  // Frontend de producción
-                    "http://localhost:3000",         // React dev server
-                    "http://localhost:5173",         // Vite dev server  
-                    "http://localhost:5174",         // Vite dev server alternate
-                    "http://localhost:5175"          // Vite dev server alternate
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+        registry.addMapping("/**") // alle Endpunkte
+                .allowedOrigins("*") // oder z.B. "http://localhost:4200"
+                .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
+                .allowedHeaders("*");
     }
 }
