@@ -35,25 +35,14 @@ public class MovieService {
 
 
     public List<RespMovieDTO> getAllMovies() {
-        try {
-            System.out.println("=== DEBUG: MovieService.getAllMovies() called ===");
-            // Use simple query to avoid PostgreSQL issues
-            List<Movie> movieList = movieRepository.findAll();
-            System.out.println("=== DEBUG: Repository returned " + movieList.size() + " movies ===");
-            
-            List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
-            movieList.forEach(movie -> {
-                System.out.println("=== DEBUG: Converting movie: " + movie.getTitle() + " (ID: " + movie.getMovieId() + ") ===");
-                respMovieDTOList.add(convertToRespMovieDTOSimple(movie));
-            });
-            
-            System.out.println("=== DEBUG: Converted " + respMovieDTOList.size() + " movies to DTO ===");
-            return respMovieDTOList;
-        } catch (Exception e) {
-            System.out.println("=== DEBUG ERROR: Exception in MovieService.getAllMovies(): " + e.getMessage() + " ===");
-            e.printStackTrace();
-            throw e; // Re-throw to let controller handle it
-        }
+        List<Movie> movieList = movieRepository.findAll();
+        List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
+        movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
+        return respMovieDTOList;
+    }
+    
+    public int getMovieCount() {
+        return (int) movieRepository.count();
     }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
@@ -84,33 +73,19 @@ public class MovieService {
         if (hallsList.isEmpty()) {
             throw new MovieVersionIsNotSupported("No Halls found by this ID");
         }
-        
-        // Filter halls that support the movie version
-        List<Hall> compatibleHalls = hallsList.stream()
-                .filter(hall -> hall.getSupportedMovieVersion().equals(newMovieDTO.getMovieVersion()))
-                .toList();
-        
-        if (compatibleHalls.isEmpty()) {
-            throw new MovieVersionIsNotSupported("Movie version is not supported by any of the selected halls");
+        for (Hall hall : hallsList) {
+            if(hall.getSupportedMovieVersion().equals(newMovieDTO.getMovieVersion())){
+                Movie movie = new Movie(newMovieDTO.getTitle(), newMovieDTO.getMainCharacter(),newMovieDTO.getDescription(),convertDateToLocalDate(newMovieDTO.getPremieredAt()) ,newMovieDTO.getMovieVersion(), newMovieDTO.getImage(), newMovieDTO.getImageBkd(), newMovieDTO.getVideoId());
+                movieRepository.save(movie);
+                Movie_plays_in mpl = new Movie_plays_in();
+                mpl.setMovie(movie);
+                mpl.setHall(hall);
+                moviePlaysInRepository.save(mpl);
+                movie.getMoviePlaysInList().add(mpl);
+                return movie;
+            }
         }
-        
-        // Create the movie once
-        Movie movie = new Movie(newMovieDTO.getTitle(), newMovieDTO.getMainCharacter(), 
-                newMovieDTO.getDescription(), convertDateToLocalDate(newMovieDTO.getPremieredAt()), 
-                newMovieDTO.getMovieVersion(), newMovieDTO.getImage(), 
-                newMovieDTO.getImageBkd(), newMovieDTO.getVideoId());
-        movieRepository.save(movie);
-        
-        // Create Movie_plays_in relationships for all compatible halls
-        for (Hall hall : compatibleHalls) {
-            Movie_plays_in mpl = new Movie_plays_in();
-            mpl.setMovie(movie);
-            mpl.setHall(hall);
-            moviePlaysInRepository.save(mpl);
-            movie.getMoviePlaysInList().add(mpl);
-        }
-        
-        return movie;
+        throw new MovieVersionIsNotSupported("Movie version is not supported");
     }
     public LocalDate convertDateToLocalDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -120,24 +95,47 @@ public class MovieService {
     public RespMovieDTO convertToRespMovieDTO(Movie movie) {
         return new RespMovieDTO(movie.getMovieId(),movie.getTitle(),movie.getMainCharacter(),movie.getDescription(),movie.getPremieredAt(),movie.getMovieVersion(),getHallsList(movie),movie.getImage(),movie.getImageBkd(),movie.getVideoId());
     }
-    
-    public RespMovieDTO convertToRespMovieDTOSimple(Movie movie) {
-        // Simple conversion without halls to avoid lazy loading issues
-        return new RespMovieDTO(movie.getMovieId(),movie.getTitle(),movie.getMainCharacter(),movie.getDescription(),movie.getPremieredAt(),movie.getMovieVersion(),new ArrayList<>(),movie.getImage(),movie.getImageBkd(),movie.getVideoId());
-    }
 
     public List<RespHallDTO> getHallsList(Movie movie) {
-        // Since we now use findAllWithHalls(), the moviePlaysInList should be eagerly loaded
-        // Check if the list is initialized and not empty
-        if (movie.getMoviePlaysInList() != null && !movie.getMoviePlaysInList().isEmpty()) {
-            // Use the eagerly loaded data directly
-            return movie.getMoviePlaysInList().stream()
-                    .map(mpi -> hallService.convertToRespHallDTO(mpi.getHall()))
-                    .toList();
+        List<RespHallDTO> hallList = new ArrayList<>();
+        try {
+            if (movie == null || movie.getMovieId() == null) {
+                System.err.println("Movie or movieId is null");
+                return hallList;
+            }
+            
+            // Obtener las salas directamente usando una consulta más simple
+            List<Long> hallIds = moviePlaysInRepository.findHallIdsByMovieId(movie.getMovieId());
+            if (hallIds == null || hallIds.isEmpty()) {
+                System.err.println("No hall IDs found for movie " + movie.getMovieId());
+                return hallList;
+            }
+            
+            List<Hall> halls = hallRepository.findByHallIdIn(hallIds);
+            if (halls == null || halls.isEmpty()) {
+                System.err.println("No halls found for hall IDs: " + hallIds);
+                return hallList;
+            }
+            
+            hallList = halls.stream()
+                .filter(hall -> hall != null) // Filtrar halls nulos
+                .map(hall -> {
+                    try {
+                        return hallService.convertToRespHallDTO(hall);
+                    } catch (Exception e) {
+                        System.err.println("Error converting hall " + hall.getHallId() + " to DTO: " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(dto -> dto != null) // Filtrar DTOs nulos
+                .toList();
+                
+        } catch (Exception e) {
+            // Log del error y devolver lista vacía en caso de fallo
+            System.err.println("Error getting halls for movie " + (movie != null ? movie.getMovieId() : "null") + ": " + e.getMessage());
+            e.printStackTrace();
         }
-        // If for some reason the eager loading didn't work, return empty list to avoid N+1 queries
-        System.out.println("Warning: Movie " + movie.getMovieId() + " has no halls loaded. Returning empty list.");
-        return new ArrayList<>();
+        return hallList;
     }
 
     public List<RespMovieDTO> getMoviesByMovieVersion(String movieVersion) {
@@ -187,12 +185,5 @@ public class MovieService {
             }
         }
         return filterdMovieList;
-    }
-    
-    public long getMovieCount() {
-        System.out.println("=== DEBUG: Getting movie count from repository ===");
-        long count = movieRepository.count();
-        System.out.println("=== DEBUG: Movie count: " + count + " ===");
-        return count;
     }
 }
