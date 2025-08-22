@@ -4,11 +4,11 @@ INSERT INTO cinema (cinema_id, name, address, manager, max_halls) VALUES
 (2, 'Mega Kino Berlin', 'Berlin, Deutschland', 'Anna Schmidt', 8),
 (3, 'Star Cinema München', 'München, Deutschland', 'Peter Wagner', 6);
 
--- Insert sample movies (usando el orden correcto de las columnas)
-INSERT INTO movie (movie_version, premiered_at, movie_id, image, image_bkd, main_character, title, video_id, description) VALUES 
-(0, '2022-12-16', 1, 'https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg', 'Jake Sully', 'Avatar: The Way of Water', 'o_WdFm9VuE4', 'Jake Sully lives with his newfound family formed on the extrasolar moon Pandora.'),
-(2, '2022-05-27', 2, 'https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/odJ4hx6g6vBt4lBWKFD1tI8WS4x.jpg', 'Pete Mitchell', 'Top Gun: Maverick', 'qSqVVswa420', 'After thirty years, Maverick is still pushing the envelope as a top naval aviator.'),
-(1, '2021-12-17', 3, 'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg', 'Peter Parker', 'Spider-Man: No Way Home', 'JfVOs4VSpmA', 'Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero.');
+-- Insert sample movies (sin especificar movie_id para evitar problemas de orden)
+INSERT INTO movie (title, main_character, description, premiered_at, movie_version, image, image_bkd, video_id) VALUES 
+('Avatar: The Way of Water', 'Jake Sully', 'Jake Sully lives with his newfound family formed on the extrasolar moon Pandora.', '2022-12-16', 0, 'https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg', 'o_WdFm9VuE4'),
+('Top Gun: Maverick', 'Pete Mitchell', 'After thirty years, Maverick is still pushing the envelope as a top naval aviator.', '2022-05-27', 2, 'https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/odJ4hx6g6vBt4lBWKFD1tI8WS4x.jpg', 'qSqVVswa420'),
+('Spider-Man: No Way Home', 'Peter Parker', 'Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero.', '2021-12-17', 1, 'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg', 'JfVOs4VSpmA');
 
 -- Insert sample halls (one by one to ensure foreign key constraints)
 INSERT INTO hall (hall_id, capacity, occupied_seats, supported_movie_version, seat_price, cinema_id, screening_times) VALUES 
