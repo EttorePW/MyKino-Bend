@@ -101,9 +101,17 @@ docker run -p 8080:8080 \
 ## ☁️ Deployment
 
 ### Render Deployment
+
+#### Option 1: Using render.yaml (Recommended)
+1. Connect your GitHub repository to Render
+2. The `render.yaml` file will automatically configure everything
+3. Render will use the native Java runtime (faster than Docker)
+
+#### Option 2: Manual Web Service Setup
 1. Connect your GitHub repository to Render
 2. Create a new Web Service
 3. Configure build settings:
+   - **Runtime**: `java`
    - **Build Command**: `./mvnw clean package -DskipTests`
    - **Start Command**: `java -jar target/Kino-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod`
 4. Set environment variables:
@@ -111,6 +119,11 @@ docker run -p 8080:8080 \
    - `DATABASE_USERNAME`: Database username
    - `DATABASE_PASSWORD`: Database password
    - `SPRING_PROFILES_ACTIVE`: `prod`
+
+#### Option 3: Docker Deployment
+If you prefer Docker, use the included Dockerfile:
+1. Render will automatically detect and use the Dockerfile
+2. Environment variables remain the same
 
 ### Manual Build
 ```bash
