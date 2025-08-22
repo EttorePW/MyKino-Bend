@@ -35,7 +35,8 @@ public class Seat {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate premieredAt;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", 
+                foreignKey = @ForeignKey(name = "fk_seat_customer"))
     private Customer customer;
 
 }

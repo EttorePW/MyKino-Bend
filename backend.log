@@ -1,0 +1,222 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/opt/homebrew/Cellar/maven/3.9.11/libexec/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------------< CodersBay:Kino >---------------------------
+[INFO] Building Kino 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.4:run (default-cli) > test-compile @ Kino >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ Kino ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] Copying 4 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ Kino ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ Kino ---
+[INFO] skip non existing resourceDirectory /Users/ettorejunior/IJIDEA-PROBE/MyKino-Bend/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ Kino ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.5.4:run (default-cli) < test-compile @ Kino <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.4:run (default-cli) @ Kino ---
+[INFO] Attaching agents: []
+     ,--.                ,--.                      ,--. ,--.,--.,--.  ,--. ,-----.,--.   ,--.
+     |  |,--.,--.,--,--, `--' ,---. ,--.--. ,---.  |  .'   /|  ||  ,'.|  |'  .-.  '\  `.'  /
+,--. |  ||  ||  ||      \,--.| .-. ||  .--'(  .-'  |  .   ' |  ||  |' '  ||  | |  | .'    \
+|  '-'  /'  ''  '|  ||  ||  |' '-' '|  |   .-'  `) |  |\   \|  ||  | `   |'  '-'  '/  .'.  \
+ `-----'  `----' `--''--'`--' `---' `--'   `----'  `--' '--'`--'`--'  `--' `-----''--'   '--'
+2025-08-21T17:46:54.587+02:00  INFO 15148 --- [Kino] [           main] CodersBay.Kino.KinoApplication           : Starting KinoApplication using Java 24.0.1 with PID 15148 (/Users/ettorejunior/IJIDEA-PROBE/MyKino-Bend/target/classes started by ettorejunior in /Users/ettorejunior/IJIDEA-PROBE/MyKino-Bend)
+2025-08-21T17:46:54.588+02:00  INFO 15148 --- [Kino] [           main] CodersBay.Kino.KinoApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-08-21T17:46:54.858+02:00  INFO 15148 --- [Kino] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-21T17:46:54.877+02:00  INFO 15148 --- [Kino] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 8 JPA repository interfaces.
+2025-08-21T17:46:55.012+02:00  INFO 15148 --- [Kino] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-21T17:46:55.016+02:00  INFO 15148 --- [Kino] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-21T17:46:55.016+02:00  INFO 15148 --- [Kino] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-21T17:46:55.030+02:00  INFO 15148 --- [Kino] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-21T17:46:55.030+02:00  INFO 15148 --- [Kino] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 428 ms
+2025-08-21T17:46:55.097+02:00  INFO 15148 --- [Kino] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-21T17:46:55.108+02:00  INFO 15148 --- [Kino] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-21T17:46:55.114+02:00  INFO 15148 --- [Kino] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-21T17:46:55.182+02:00  INFO 15148 --- [Kino] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-21T17:46:55.189+02:00  INFO 15148 --- [Kino] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-21T17:46:55.235+02:00  INFO 15148 --- [Kino] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-08-21T17:46:55.236+02:00  INFO 15148 --- [Kino] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-21T17:46:55.242+02:00  WARN 15148 --- [Kino] [           main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-21T17:46:55.248+02:00  INFO 15148 --- [Kino] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-21T17:46:55.530+02:00  INFO 15148 --- [Kino] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists bill cascade 
+Hibernate: 
+    drop table if exists cinema cascade 
+Hibernate: 
+    drop table if exists customer cascade 
+Hibernate: 
+    drop table if exists hall cascade 
+Hibernate: 
+    drop table if exists hall_screening_times cascade 
+Hibernate: 
+    drop table if exists movie cascade 
+Hibernate: 
+    drop table if exists movie_plays_in cascade 
+Hibernate: 
+    drop table if exists seat cascade 
+Hibernate: 
+    drop table if exists users cascade 
+Hibernate: 
+    create table bill (
+        bill_date date,
+        total_price float(53) not null,
+        bill_id bigint generated by default as identity,
+        customer_id bigint unique,
+        customer_name varchar(255),
+        primary key (bill_id)
+    )
+Hibernate: 
+    create table cinema (
+        max_halls integer not null,
+        cinema_id bigint generated by default as identity,
+        address varchar(255),
+        manager varchar(255),
+        name varchar(255),
+        primary key (cinema_id)
+    )
+Hibernate: 
+    create table customer (
+        an_adult boolean,
+        customer_id bigint generated by default as identity,
+        address varchar(255),
+        email varchar(255),
+        first_name varchar(255),
+        last_name varchar(255),
+        phone varchar(255),
+        primary key (customer_id)
+    )
+Hibernate: 
+    create table hall (
+        capacity integer not null,
+        occupied_seats integer not null,
+        seat_price float(53) not null,
+        cinema_id bigint,
+        hall_id bigint generated by default as identity,
+        supported_movie_version enum ('D2D','DBOX','R3D'),
+        primary key (hall_id)
+    )
+Hibernate: 
+    create table hall_screening_times (
+        hall_id bigint not null,
+        screening_time varchar(255)
+    )
+Hibernate: 
+    create table movie (
+        premiered_at date,
+        movie_id bigint generated by default as identity,
+        description TEXT,
+        image varchar(255),
+        image_bkd varchar(255),
+        main_character varchar(255),
+        title varchar(255),
+        video_id varchar(255),
+        movie_version enum ('D2D','DBOX','R3D'),
+        primary key (movie_id)
+    )
+Hibernate: 
+    create table movie_plays_in (
+        hall_id bigint not null,
+        movie_id bigint not null,
+        primary key (hall_id, movie_id)
+    )
+Hibernate: 
+    create table seat (
+        col_number integer,
+        hall_id integer,
+        movie_id integer,
+        premiered_at date,
+        row_number integer,
+        customer_id bigint,
+        seat_id bigint generated by default as identity,
+        cinema_name varchar(255),
+        movie_name varchar(255),
+        reservation_date varchar(255),
+        reservation_time varchar(255),
+        movie_version enum ('D2D','DBOX','R3D'),
+        primary key (seat_id)
+    )
+Hibernate: 
+    create table users (
+        user_id bigint generated by default as identity,
+        confirm_password varchar(255),
+        user_email varchar(255),
+        user_first_name varchar(255),
+        user_last_name varchar(255),
+        user_password varchar(255),
+        primary key (user_id)
+    )
+Hibernate: 
+    alter table if exists bill 
+       add constraint FKcdveik90g4pvk7m249scu73pg 
+       foreign key (customer_id) 
+       references customer
+Hibernate: 
+    alter table if exists hall 
+       add constraint FKte75ikgkdmhfutuupvx2lhknr 
+       foreign key (cinema_id) 
+       references cinema
+Hibernate: 
+    alter table if exists hall_screening_times 
+       add constraint FK96qh948e65d3j9afyrbigry4u 
+       foreign key (hall_id) 
+       references hall
+Hibernate: 
+    alter table if exists movie_plays_in 
+       add constraint FK538rmb43glfuxym4alaqkoj4u 
+       foreign key (hall_id) 
+       references hall
+Hibernate: 
+    alter table if exists movie_plays_in 
+       add constraint FKdjhc45v40cuf07eudnmm5tv5n 
+       foreign key (movie_id) 
+       references movie
+Hibernate: 
+    alter table if exists seat 
+       add constraint FK56306qwpvu22te2dqg2jyqjgl 
+       foreign key (customer_id) 
+       references customer
+2025-08-21T17:46:55.553+02:00  INFO 15148 --- [Kino] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-21T17:46:55.666+02:00  INFO 15148 --- [Kino] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-08-21T17:46:55.837+02:00  WARN 15148 --- [Kino] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-21T17:46:55.976+02:00  INFO 15148 --- [Kino] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-08-21T17:46:55.983+02:00  INFO 15148 --- [Kino] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-08-21T17:46:56.010+02:00  INFO 15148 --- [Kino] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-21T17:46:56.017+02:00  INFO 15148 --- [Kino] [           main] CodersBay.Kino.KinoApplication           : Started KinoApplication in 1.532 seconds (process running for 1.625)
+2025-08-21T17:47:08.398+02:00  INFO 15148 --- [Kino] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-21T17:47:08.398+02:00  INFO 15148 --- [Kino] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-21T17:47:08.399+02:00  INFO 15148 --- [Kino] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:29 min
+[INFO] Finished at: 2025-08-21T17:49:22+02:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.5.4:run (default-cli) on project Kino: Process terminated with exit code: 137 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
