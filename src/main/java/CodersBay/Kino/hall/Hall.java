@@ -27,7 +27,7 @@ public class Hall {
    private MovieVersion supportedMovieVersion;
    private double seatPrice;
    @ManyToOne
-   @JoinColumn(name = "cinemaId")
+   @JoinColumn(name = "cinema_id")
    private Cinema cinema;
    @Convert(converter = StringListConverter.class)
    @Column(columnDefinition = "TEXT")
