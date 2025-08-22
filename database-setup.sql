@@ -200,19 +200,3 @@ SELECT setval('customer_customer_id_seq', (SELECT MAX(customer_id) FROM customer
 SELECT setval('seat_seat_id_seq', (SELECT MAX(seat_id) FROM seat));
 SELECT setval('bill_bill_id_seq', (SELECT MAX(bill_id) FROM bill));
 
--- Verification queries (optional - you can run these to verify the data)
-/*
-SELECT 'Cinemas' as table_name, count(*) as record_count FROM cinema
-UNION ALL
-SELECT 'Movies' as table_name, count(*) as record_count FROM movie
-UNION ALL
-SELECT 'Halls' as table_name, count(*) as record_count FROM hall
-UNION ALL
-SELECT 'Movie-Hall Relations' as table_name, count(*) as record_count FROM movie_plays_in
-UNION ALL
-SELECT 'Customers' as table_name, count(*) as record_count FROM customer
-UNION ALL
-SELECT 'Reserved Seats' as table_name, count(*) as record_count FROM seat
-UNION ALL
-SELECT 'Bills' as table_name, count(*) as record_count FROM bill;
-*/
