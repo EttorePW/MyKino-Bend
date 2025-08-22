@@ -70,19 +70,33 @@ public class MovieService {
         if (hallsList.isEmpty()) {
             throw new MovieVersionIsNotSupported("No Halls found by this ID");
         }
-        for (Hall hall : hallsList) {
-            if(hall.getSupportedMovieVersion().equals(newMovieDTO.getMovieVersion())){
-                Movie movie = new Movie(newMovieDTO.getTitle(), newMovieDTO.getMainCharacter(),newMovieDTO.getDescription(),convertDateToLocalDate(newMovieDTO.getPremieredAt()) ,newMovieDTO.getMovieVersion(), newMovieDTO.getImage(), newMovieDTO.getImageBkd(), newMovieDTO.getVideoId());
-                movieRepository.save(movie);
-                Movie_plays_in mpl = new Movie_plays_in();
-                mpl.setMovie(movie);
-                mpl.setHall(hall);
-                moviePlaysInRepository.save(mpl);
-                movie.getMoviePlaysInList().add(mpl);
-                return movie;
-            }
+        
+        // Filter halls that support the movie version
+        List<Hall> compatibleHalls = hallsList.stream()
+                .filter(hall -> hall.getSupportedMovieVersion().equals(newMovieDTO.getMovieVersion()))
+                .toList();
+        
+        if (compatibleHalls.isEmpty()) {
+            throw new MovieVersionIsNotSupported("Movie version is not supported by any of the selected halls");
         }
-        throw new MovieVersionIsNotSupported("Movie version is not supported");
+        
+        // Create the movie once
+        Movie movie = new Movie(newMovieDTO.getTitle(), newMovieDTO.getMainCharacter(), 
+                newMovieDTO.getDescription(), convertDateToLocalDate(newMovieDTO.getPremieredAt()), 
+                newMovieDTO.getMovieVersion(), newMovieDTO.getImage(), 
+                newMovieDTO.getImageBkd(), newMovieDTO.getVideoId());
+        movieRepository.save(movie);
+        
+        // Create Movie_plays_in relationships for all compatible halls
+        for (Hall hall : compatibleHalls) {
+            Movie_plays_in mpl = new Movie_plays_in();
+            mpl.setMovie(movie);
+            mpl.setHall(hall);
+            moviePlaysInRepository.save(mpl);
+            movie.getMoviePlaysInList().add(mpl);
+        }
+        
+        return movie;
     }
     public LocalDate convertDateToLocalDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
