@@ -35,20 +35,11 @@ public class MovieService {
 
 
     public List<RespMovieDTO> getAllMovies() {
-        try {
-            // Try the optimized query first
-            List<Movie> movieList = movieRepository.findAllWithHalls();
-            List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
-            movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
-            return respMovieDTOList;
-        } catch (Exception e) {
-            // Fallback to simple query if JOIN FETCH fails
-            System.out.println("Falling back to simple query due to: " + e.getMessage());
-            List<Movie> movieList = movieRepository.findAll();
-            List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
-            movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTOSimple(movie)));
-            return respMovieDTOList;
-        }
+        // Use simple query to avoid PostgreSQL issues
+        List<Movie> movieList = movieRepository.findAll();
+        List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
+        movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTOSimple(movie)));
+        return respMovieDTOList;
     }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
