@@ -9,8 +9,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // alle Endpunkte
-                .allowedOrigins("*") // oder z.B. "http://localhost:4200"
-                .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
-                .allowedHeaders("*");
+                .allowedOrigins(
+                    "https://mykinoapp.netlify.app",
+                    "http://localhost:3000",
+                    "http://localhost:5173",
+                    "http://localhost:4200"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(false);
     }
 }
