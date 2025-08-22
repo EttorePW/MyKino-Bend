@@ -1,16 +1,3 @@
--- Clear existing data first (in reverse order to avoid foreign key constraints)
-DELETE FROM movie_plays_in;
-DELETE FROM hall;
-DELETE FROM movie;
-DELETE FROM cinema;
-DELETE FROM customer;
-
--- Reset sequences
-ALTER SEQUENCE cinema_cinema_id_seq RESTART WITH 1;
-ALTER SEQUENCE movie_movie_id_seq RESTART WITH 1;
-ALTER SEQUENCE hall_hall_id_seq RESTART WITH 1;
-ALTER SEQUENCE customer_customer_id_seq RESTART WITH 1;
-
 -- Insert sample cinemas first
 INSERT INTO cinema (cinema_id, name, address, manager, max_halls) VALUES 
 (1, 'CinePlex Wien', 'Wien, Österreich', 'Max Manager', 5),
@@ -19,9 +6,9 @@ INSERT INTO cinema (cinema_id, name, address, manager, max_halls) VALUES
 
 -- Insert sample movies
 INSERT INTO movie (movie_id, title, main_character, description, premiered_at, movie_version, image, image_bkd, video_id) VALUES 
-(1, 'Avatar: The Way of Water', 'Jake Sully', 'Jake Sully lives with his newfound family formed on the extrasolar moon Pandora.', '2022-12-16', 'D2D', 'https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg', 'o_WdFm9VuE4'),
-(2, 'Top Gun: Maverick', 'Pete Mitchell', 'After thirty years, Maverick is still pushing the envelope as a top naval aviator.', '2022-05-27', 'DBOX', 'https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/odJ4hx6g6vBt4lBWKFD1tI8WS4x.jpg', 'qSqVVswa420'),
-(3, 'Spider-Man: No Way Home', 'Peter Parker', 'Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero.', '2021-12-17', 'R3D', 'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg', 'JfVOs4VSpmA');
+(1, 'Avatar: The Way of Water', 'Jake Sully', 'Jake Sully lives with his newfound family formed on the extrasolar moon Pandora.', '2022-12-16', 0, 'https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg', 'o_WdFm9VuE4'),
+(2, 'Top Gun: Maverick', 'Pete Mitchell', 'After thirty years, Maverick is still pushing the envelope as a top naval aviator.', '2022-05-27', 2, 'https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/odJ4hx6g6vBt4lBWKFD1tI8WS4x.jpg', 'qSqVVswa420'),
+(3, 'Spider-Man: No Way Home', 'Peter Parker', 'Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero.', '2021-12-17', 1, 'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg', 'https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg', 'JfVOs4VSpmA');
 
 -- Insert sample halls (one by one to ensure foreign key constraints)
 INSERT INTO hall (hall_id, capacity, occupied_seats, supported_movie_version, seat_price, cinema_id, screening_times) VALUES 
@@ -56,10 +43,54 @@ INSERT INTO customer (customer_id, first_name, last_name, email, an_adult) VALUE
 (1, 'Max', 'Mustermann', 'max.mustermann@email.com', true),
 (2, 'Anna', 'Schmidt', 'anna.schmidt@email.com', true),
 (3, 'Peter', 'Wagner', 'peter.wagner@email.com', false),
-(4, 'Lisa', 'Bauer', 'lisa.bauer@email.com', true);
+(4, 'Lisa', 'Bauer', 'lisa.bauer@email.com', true),
+(5, 'Carlos', 'Rodriguez', 'carlos.rodriguez@email.com', true),
+(6, 'Sophie', 'Mueller', 'sophie.mueller@email.com', true),
+(7, 'Marco', 'Rossi', 'marco.rossi@email.com', true),
+(8, 'Emma', 'Johnson', 'emma.johnson@email.com', false);
+
+-- Insert sample seats (reservierte Plätze)
+-- Avatar: The Way of Water in Hall 1 (CinePlex Wien)
+INSERT INTO seat (seat_id, row_number, col_number, hall_id, movie_id, premiered_at, customer_id, cinema_name, movie_name, movie_version, reservation_date, reservation_time) VALUES 
+(1, 5, 8, 1, 1, '2022-12-16', 1, 'CinePlex Wien', 'Avatar: The Way of Water', 'D2D', '2025-08-22', '19:00'),
+(2, 5, 9, 1, 1, '2022-12-16', 1, 'CinePlex Wien', 'Avatar: The Way of Water', 'D2D', '2025-08-22', '19:00'),
+(3, 6, 12, 1, 1, '2022-12-16', 2, 'CinePlex Wien', 'Avatar: The Way of Water', 'D2D', '2025-08-22', '19:00'),
+(4, 6, 13, 1, 1, '2022-12-16', 2, 'CinePlex Wien', 'Avatar: The Way of Water', 'D2D', '2025-08-22', '19:00'),
+
+-- Top Gun: Maverick in Hall 2 (CinePlex Wien)
+(5, 3, 5, 2, 2, '2022-05-27', 3, 'CinePlex Wien', 'Top Gun: Maverick', 'DBOX', '2025-08-23', '20:00'),
+(6, 3, 6, 2, 2, '2022-05-27', 3, 'CinePlex Wien', 'Top Gun: Maverick', 'DBOX', '2025-08-23', '20:00'),
+(7, 7, 10, 2, 2, '2022-05-27', 4, 'CinePlex Wien', 'Top Gun: Maverick', 'DBOX', '2025-08-23', '17:00'),
+
+-- Spider-Man in Hall 3 (CinePlex Wien)
+(8, 4, 7, 3, 3, '2021-12-17', 5, 'CinePlex Wien', 'Spider-Man: No Way Home', 'R3D', '2025-08-24', '15:30'),
+(9, 4, 8, 3, 3, '2021-12-17', 5, 'CinePlex Wien', 'Spider-Man: No Way Home', 'R3D', '2025-08-24', '15:30'),
+(10, 8, 15, 3, 3, '2021-12-17', 6, 'CinePlex Wien', 'Spider-Man: No Way Home', 'R3D', '2025-08-24', '18:30'),
+(11, 8, 16, 3, 3, '2021-12-17', 6, 'CinePlex Wien', 'Spider-Man: No Way Home', 'R3D', '2025-08-24', '18:30'),
+
+-- Avatar in Hall 4 (Mega Kino Berlin)
+(12, 10, 5, 4, 1, '2022-12-16', 7, 'Mega Kino Berlin', 'Avatar: The Way of Water', 'D2D', '2025-08-25', '19:30'),
+(13, 10, 6, 4, 1, '2022-12-16', 7, 'Mega Kino Berlin', 'Avatar: The Way of Water', 'D2D', '2025-08-25', '19:30'),
+(14, 10, 7, 4, 1, '2022-12-16', 7, 'Mega Kino Berlin', 'Avatar: The Way of Water', 'D2D', '2025-08-25', '19:30'),
+
+-- Top Gun in Hall 5 (Mega Kino Berlin)
+(15, 6, 10, 5, 2, '2022-05-27', 8, 'Mega Kino Berlin', 'Top Gun: Maverick', 'DBOX', '2025-08-26', '20:30');
+
+-- Insert sample bills
+INSERT INTO bill (bill_id, customer_id, customer_name, bill_date, total_price) VALUES 
+(1, 1, 'Max Mustermann', '2025-08-22', 25.00),
+(2, 2, 'Anna Schmidt', '2025-08-22', 25.00),
+(3, 3, 'Peter Wagner', '2025-08-23', 28.00),
+(4, 4, 'Lisa Bauer', '2025-08-23', 14.00),
+(5, 5, 'Carlos Rodriguez', '2025-08-24', 23.00),
+(6, 6, 'Sophie Mueller', '2025-08-24', 23.00),
+(7, 7, 'Marco Rossi', '2025-08-25', 39.00),
+(8, 8, 'Emma Johnson', '2025-08-26', 15.00);
 
 -- Update sequences to continue from the inserted values
 SELECT setval('cinema_cinema_id_seq', (SELECT MAX(cinema_id) FROM cinema));
 SELECT setval('movie_movie_id_seq', (SELECT MAX(movie_id) FROM movie));
 SELECT setval('hall_hall_id_seq', (SELECT MAX(hall_id) FROM hall));
 SELECT setval('customer_customer_id_seq', (SELECT MAX(customer_id) FROM customer));
+SELECT setval('seat_seat_id_seq', (SELECT MAX(seat_id) FROM seat));
+SELECT setval('bill_bill_id_seq', (SELECT MAX(bill_id) FROM bill));
