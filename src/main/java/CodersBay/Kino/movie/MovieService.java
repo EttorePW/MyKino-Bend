@@ -35,7 +35,7 @@ public class MovieService {
 
 
     public List<RespMovieDTO> getAllMovies() {
-        List<Movie> movieList = movieRepository.findAll();
+        List<Movie> movieList = movieRepository.findAllWithHalls();
         List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
         movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
         return respMovieDTOList;
@@ -93,10 +93,15 @@ public class MovieService {
     }
 
     public List<RespHallDTO> getHallsList(Movie movie) {
-        List<RespHallDTO> hallList;
-        Movie findedMovie = movieRepository.findById(movie.getMovieId()).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+movie.getMovieId()));
-        hallList = findedMovie.getMoviePlaysInList().stream().map(mpi -> hallService.convertToRespHallDTO(mpi.getHall())).toList();
-        return hallList;
+        // Since we now use findAllWithHalls(), the moviePlaysInList should be eagerly loaded
+        List<Movie_plays_in> moviePlaysInList = movie.getMoviePlaysInList();
+        if (moviePlaysInList == null || moviePlaysInList.isEmpty()) {
+            // Fallback: fetch from repository if for some reason it's not loaded
+            moviePlaysInList = moviePlaysInRepository.findByMovie_MovieId(movie.getMovieId());
+        }
+        return moviePlaysInList.stream()
+                .map(mpi -> hallService.convertToRespHallDTO(mpi.getHall()))
+                .toList();
     }
 
     public List<RespMovieDTO> getMoviesByMovieVersion(String movieVersion) {
