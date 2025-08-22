@@ -48,6 +48,20 @@ public class Movie {
         this.image = image;
         this.imageBkd = imageBkd;
         this.videoId = videoId;
-
+        this.moviePlaysInList = new ArrayList<>();
     };
+
+    @PostLoad
+    private void initializeLists() {
+        if (this.moviePlaysInList == null) {
+            this.moviePlaysInList = new ArrayList<>();
+        }
+    }
+
+    public List<Movie_plays_in> getMoviePlaysInList() {
+        if (this.moviePlaysInList == null) {
+            this.moviePlaysInList = new ArrayList<>();
+        }
+        return this.moviePlaysInList;
+    }
 }

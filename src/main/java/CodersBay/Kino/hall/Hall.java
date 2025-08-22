@@ -42,6 +42,31 @@ public class Hall {
       this.supportedMovieVersion = supportedMovieVersion;
       this.seatPrice = seatPrice;
       this.cinema = cinema;
-      this.screeningTimes = screeningTimes;
+      this.screeningTimes = screeningTimes != null ? screeningTimes : new ArrayList<>();
+      this.moviePlaysInList = new ArrayList<>();
+   }
+
+   @PostLoad
+   private void initializeLists() {
+      if (this.screeningTimes == null) {
+         this.screeningTimes = new ArrayList<>();
+      }
+      if (this.moviePlaysInList == null) {
+         this.moviePlaysInList = new ArrayList<>();
+      }
+   }
+
+   public List<Movie_plays_in> getMoviePlaysInList() {
+      if (this.moviePlaysInList == null) {
+         this.moviePlaysInList = new ArrayList<>();
+      }
+      return this.moviePlaysInList;
+   }
+
+   public List<String> getScreeningTimes() {
+      if (this.screeningTimes == null) {
+         this.screeningTimes = new ArrayList<>();
+      }
+      return this.screeningTimes;
    }
 }
