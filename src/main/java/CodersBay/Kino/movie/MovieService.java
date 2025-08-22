@@ -35,11 +35,25 @@ public class MovieService {
 
 
     public List<RespMovieDTO> getAllMovies() {
-        // Use simple query to avoid PostgreSQL issues
-        List<Movie> movieList = movieRepository.findAll();
-        List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
-        movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTOSimple(movie)));
-        return respMovieDTOList;
+        try {
+            System.out.println("=== DEBUG: MovieService.getAllMovies() called ===");
+            // Use simple query to avoid PostgreSQL issues
+            List<Movie> movieList = movieRepository.findAll();
+            System.out.println("=== DEBUG: Repository returned " + movieList.size() + " movies ===");
+            
+            List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
+            movieList.forEach(movie -> {
+                System.out.println("=== DEBUG: Converting movie: " + movie.getTitle() + " (ID: " + movie.getMovieId() + ") ===");
+                respMovieDTOList.add(convertToRespMovieDTOSimple(movie));
+            });
+            
+            System.out.println("=== DEBUG: Converted " + respMovieDTOList.size() + " movies to DTO ===");
+            return respMovieDTOList;
+        } catch (Exception e) {
+            System.out.println("=== DEBUG ERROR: Exception in MovieService.getAllMovies(): " + e.getMessage() + " ===");
+            e.printStackTrace();
+            throw e; // Re-throw to let controller handle it
+        }
     }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
@@ -173,5 +187,12 @@ public class MovieService {
             }
         }
         return filterdMovieList;
+    }
+    
+    public long getMovieCount() {
+        System.out.println("=== DEBUG: Getting movie count from repository ===");
+        long count = movieRepository.count();
+        System.out.println("=== DEBUG: Movie count: " + count + " ===");
+        return count;
     }
 }

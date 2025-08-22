@@ -24,9 +24,20 @@ public class MovieController {
     @GetMapping
     public ResponseEntity<List<RespMovieDTO>> getMovies(){
         try {
+            System.out.println("=== DEBUG: MovieController.getMovies() called ===");
             List<RespMovieDTO> movies = movieService.getAllMovies();
+            System.out.println("=== DEBUG: Retrieved " + movies.size() + " movies ===");
+            
+            if (movies.isEmpty()) {
+                System.out.println("=== DEBUG: No movies found - checking database connection ===");
+            } else {
+                System.out.println("=== DEBUG: First movie: " + movies.get(0).getTitle() + " ===");
+            }
+            
             return new ResponseEntity<>(movies, HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println("=== DEBUG ERROR: Exception in getMovies(): " + e.getMessage() + " ===");
+            System.out.println("=== DEBUG ERROR: Exception class: " + e.getClass().getSimpleName() + " ===");
             e.printStackTrace();
             // Return empty list on error instead of 500
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
@@ -53,5 +64,15 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMovie(@PathVariable Long id){
         return new ResponseEntity<>(movieService.deleteMovie(id),HttpStatus.OK);
+    }
+    
+    @GetMapping("/debug/count")
+    public ResponseEntity<String> getMovieCount(){
+        try {
+            long count = movieService.getMovieCount();
+            return new ResponseEntity<>("Total movies in database: " + count, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error connecting to database: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
