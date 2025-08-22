@@ -35,10 +35,20 @@ public class MovieService {
 
 
     public List<RespMovieDTO> getAllMovies() {
-        List<Movie> movieList = movieRepository.findAllWithHalls();
-        List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
-        movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
-        return respMovieDTOList;
+        try {
+            // Try the optimized query first
+            List<Movie> movieList = movieRepository.findAllWithHalls();
+            List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
+            movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTO(movie)));
+            return respMovieDTOList;
+        } catch (Exception e) {
+            // Fallback to simple query if JOIN FETCH fails
+            System.out.println("Falling back to simple query due to: " + e.getMessage());
+            List<Movie> movieList = movieRepository.findAll();
+            List<RespMovieDTO> respMovieDTOList = new ArrayList<>();
+            movieList.forEach(movie -> respMovieDTOList.add(convertToRespMovieDTOSimple(movie)));
+            return respMovieDTOList;
+        }
     }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
@@ -90,6 +100,11 @@ public class MovieService {
 
     public RespMovieDTO convertToRespMovieDTO(Movie movie) {
         return new RespMovieDTO(movie.getMovieId(),movie.getTitle(),movie.getMainCharacter(),movie.getDescription(),movie.getPremieredAt(),movie.getMovieVersion(),getHallsList(movie),movie.getImage(),movie.getImageBkd(),movie.getVideoId());
+    }
+    
+    public RespMovieDTO convertToRespMovieDTOSimple(Movie movie) {
+        // Simple conversion without halls to avoid lazy loading issues
+        return new RespMovieDTO(movie.getMovieId(),movie.getTitle(),movie.getMainCharacter(),movie.getDescription(),movie.getPremieredAt(),movie.getMovieVersion(),new ArrayList<>(),movie.getImage(),movie.getImageBkd(),movie.getVideoId());
     }
 
     public List<RespHallDTO> getHallsList(Movie movie) {

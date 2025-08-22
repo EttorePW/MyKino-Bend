@@ -15,6 +15,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     Movie findByTitle(String title);
     
-    @Query("SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.moviePlaysInList mpl LEFT JOIN FETCH mpl.hall")
+    @Query("SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.moviePlaysInList mpl LEFT JOIN FETCH mpl.hall h")
     List<Movie> findAllWithHalls();
 }
