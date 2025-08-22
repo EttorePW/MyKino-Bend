@@ -94,14 +94,16 @@ public class MovieService {
 
     public List<RespHallDTO> getHallsList(Movie movie) {
         // Since we now use findAllWithHalls(), the moviePlaysInList should be eagerly loaded
-        List<Movie_plays_in> moviePlaysInList = movie.getMoviePlaysInList();
-        if (moviePlaysInList == null || moviePlaysInList.isEmpty()) {
-            // Fallback: fetch from repository if for some reason it's not loaded
-            moviePlaysInList = moviePlaysInRepository.findByMovie_MovieId(movie.getMovieId());
+        // Check if the list is initialized and not empty
+        if (movie.getMoviePlaysInList() != null && !movie.getMoviePlaysInList().isEmpty()) {
+            // Use the eagerly loaded data directly
+            return movie.getMoviePlaysInList().stream()
+                    .map(mpi -> hallService.convertToRespHallDTO(mpi.getHall()))
+                    .toList();
         }
-        return moviePlaysInList.stream()
-                .map(mpi -> hallService.convertToRespHallDTO(mpi.getHall()))
-                .toList();
+        // If for some reason the eager loading didn't work, return empty list to avoid N+1 queries
+        System.out.println("Warning: Movie " + movie.getMovieId() + " has no halls loaded. Returning empty list.");
+        return new ArrayList<>();
     }
 
     public List<RespMovieDTO> getMoviesByMovieVersion(String movieVersion) {
