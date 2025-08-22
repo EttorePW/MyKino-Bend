@@ -9,7 +9,8 @@ java -version
 
 echo "🌍 Environment variables:"
 echo "SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-not set}"
-echo "DATABASE_URL: ${DATABASE_URL:-not set}"
+echo "DATABASE_URL (Render): ${DATABASE_URL:-not set}"
+echo "JDBC_DATABASE_URL (Our): ${JDBC_DATABASE_URL:-not set}"
 echo "DATABASE_USERNAME: ${DATABASE_USERNAME:-not set}"
 echo "PORT: ${PORT:-8080}"
 

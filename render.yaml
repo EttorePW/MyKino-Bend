@@ -16,7 +16,7 @@ services:
         value: prod
       - key: JAVA_TOOL_OPTIONS
         value: -Xmx512m
-      - key: DATABASE_URL
+      - key: JDBC_DATABASE_URL
         value: jdbc:postgresql://dpg-d2isk6emcj7s73cqung0-a.oregon-postgres.render.com/mykino_database
       - key: DATABASE_USERNAME
         value: mykino_database_user
