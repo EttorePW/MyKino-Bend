@@ -1,3 +1,16 @@
+-- Clear existing data first (in reverse order to avoid foreign key constraints)
+DELETE FROM movie_plays_in;
+DELETE FROM hall;
+DELETE FROM movie;
+DELETE FROM cinema;
+DELETE FROM customer;
+
+-- Reset sequences
+ALTER SEQUENCE cinema_cinema_id_seq RESTART WITH 1;
+ALTER SEQUENCE movie_movie_id_seq RESTART WITH 1;
+ALTER SEQUENCE hall_hall_id_seq RESTART WITH 1;
+ALTER SEQUENCE customer_customer_id_seq RESTART WITH 1;
+
 -- Insert sample cinemas first
 INSERT INTO cinema (cinema_id, name, address, manager, max_halls) VALUES 
 (1, 'CinePlex Wien', 'Wien, Österreich', 'Max Manager', 5),
