@@ -1,0 +1,34 @@
+[
+  {
+    "_id": "6502f7g6h4g0f8g7hdf5f812",
+    "userFirstName": "Admin",
+    "userLastName": "System",
+    "userEmail": "admin@mykino.com",
+    "userPassword": "admin123",
+    "confirmPassword": "admin123"
+  },
+  {
+    "_id": "6502f7g6h4g0f8g7hdf5f813",
+    "userFirstName": "Manager",
+    "userLastName": "Cinema",
+    "userEmail": "manager@mykino.com", 
+    "userPassword": "manager123",
+    "confirmPassword": "manager123"
+  },
+  {
+    "_id": "6502f7g6h4g0f8g7hdf5f814",
+    "userFirstName": "Employee",
+    "userLastName": "Staff",
+    "userEmail": "staff@mykino.com",
+    "userPassword": "staff123",
+    "confirmPassword": "staff123"
+  },
+  {
+    "_id": "6502f7g6h4g0f8g7hdf5f815",
+    "userFirstName": "Test",
+    "userLastName": "User",
+    "userEmail": "test@mykino.com",
+    "userPassword": "test123",
+    "confirmPassword": "test123"
+  }
+]

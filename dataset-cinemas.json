@@ -1,0 +1,34 @@
+[
+  {
+    "_id": "6502f1a2b8f4e2c1d8e9a123",
+    "name": "CinePlex Wien",
+    "address": "Mariahilfer Straße 77-79, 1060 Wien, Austria",
+    "manager": "Hans Mueller",
+    "maxHalls": 8,
+    "hallIds": ["6502f2b1c9f5e3d2e9faa456", "6502f2b1c9f5e3d2e9faa457", "6502f2b1c9f5e3d2e9faa458"]
+  },
+  {
+    "_id": "6502f1a2b8f4e2c1d8e9a124",
+    "name": "Mega Kino Berlin",
+    "address": "Potsdamer Platz 4, 10785 Berlin, Deutschland",
+    "manager": "Ingrid Schmidt",
+    "maxHalls": 12,
+    "hallIds": ["6502f2b1c9f5e3d2e9faa459", "6502f2b1c9f5e3d2e9faa460", "6502f2b1c9f5e3d2e9faa461"]
+  },
+  {
+    "_id": "6502f1a2b8f4e2c1d8e9a125",
+    "name": "Star Cinema München",
+    "address": "Maximilianstraße 26, 80539 München, Deutschland",
+    "manager": "Klaus Weber",
+    "maxHalls": 6,
+    "hallIds": ["6502f2b1c9f5e3d2e9faa462", "6502f2b1c9f5e3d2e9faa463"]
+  },
+  {
+    "_id": "6502f1a2b8f4e2c1d8e9a126",
+    "name": "Cinemaxx Hamburg",
+    "address": "Dammtorstraße 7, 20354 Hamburg, Deutschland",
+    "manager": "Andrea Fischer",
+    "maxHalls": 10,
+    "hallIds": ["6502f2b1c9f5e3d2e9faa464", "6502f2b1c9f5e3d2e9faa465"]
+  }
+]

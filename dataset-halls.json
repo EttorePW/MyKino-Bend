@@ -1,0 +1,122 @@
+[
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa456",
+    "capacity": 120,
+    "occupiedSeats": 15,
+    "supportedMovieVersion": "D2D",
+    "seatPrice": 12.50,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a123",
+    "cinemaName": "CinePlex Wien",
+    "cinemaAddress": "Mariahilfer Straße 77-79, 1060 Wien, Austria",
+    "screeningTimes": ["10:00", "13:00", "16:00", "19:00", "22:00"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b567", "6502f3c2d0f6e4e3eaf1b569"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa457",
+    "capacity": 80,
+    "occupiedSeats": 8,
+    "supportedMovieVersion": "DBOX",
+    "seatPrice": 14.00,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a123",
+    "cinemaName": "CinePlex Wien", 
+    "cinemaAddress": "Mariahilfer Straße 77-79, 1060 Wien, Austria",
+    "screeningTimes": ["11:00", "14:00", "17:00", "20:00"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b568"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa458",
+    "capacity": 150,
+    "occupiedSeats": 22,
+    "supportedMovieVersion": "R3D",
+    "seatPrice": 11.50,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a123",
+    "cinemaName": "CinePlex Wien",
+    "cinemaAddress": "Mariahilfer Straße 77-79, 1060 Wien, Austria",
+    "screeningTimes": ["09:30", "12:30", "15:30", "18:30", "21:30"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b570"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa459",
+    "capacity": 200,
+    "occupiedSeats": 35,
+    "supportedMovieVersion": "D2D",
+    "seatPrice": 13.00,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a124",
+    "cinemaName": "Mega Kino Berlin",
+    "cinemaAddress": "Potsdamer Platz 4, 10785 Berlin, Deutschland",
+    "screeningTimes": ["10:30", "13:30", "16:30", "19:30", "22:30"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b567", "6502f3c2d0f6e4e3eaf1b569"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa460",
+    "capacity": 100,
+    "occupiedSeats": 12,
+    "supportedMovieVersion": "DBOX",
+    "seatPrice": 15.00,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a124",
+    "cinemaName": "Mega Kino Berlin",
+    "cinemaAddress": "Potsdamer Platz 4, 10785 Berlin, Deutschland",
+    "screeningTimes": ["11:30", "14:30", "17:30", "20:30"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b568", "6502f3c2d0f6e4e3eaf1b571"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa461",
+    "capacity": 90,
+    "occupiedSeats": 18,
+    "supportedMovieVersion": "R3D",
+    "seatPrice": 12.50,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a124",
+    "cinemaName": "Mega Kino Berlin",
+    "cinemaAddress": "Potsdamer Platz 4, 10785 Berlin, Deutschland",
+    "screeningTimes": ["10:15", "13:15", "16:15", "19:15", "22:15"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b570"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa462",
+    "capacity": 110,
+    "occupiedSeats": 5,
+    "supportedMovieVersion": "D2D",
+    "seatPrice": 12.00,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a125",
+    "cinemaName": "Star Cinema München",
+    "cinemaAddress": "Maximilianstraße 26, 80539 München, Deutschland",
+    "screeningTimes": ["10:45", "13:45", "16:45", "19:45", "22:45"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b567", "6502f3c2d0f6e4e3eaf1b569"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa463",
+    "capacity": 75,
+    "occupiedSeats": 3,
+    "supportedMovieVersion": "DBOX",
+    "seatPrice": 14.50,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a125",
+    "cinemaName": "Star Cinema München",
+    "cinemaAddress": "Maximilianstraße 26, 80539 München, Deutschland",
+    "screeningTimes": ["11:45", "14:45", "17:45", "20:45"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b568", "6502f3c2d0f6e4e3eaf1b571"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa464",
+    "capacity": 180,
+    "occupiedSeats": 42,
+    "supportedMovieVersion": "D2D",
+    "seatPrice": 13.50,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a126",
+    "cinemaName": "Cinemaxx Hamburg",
+    "cinemaAddress": "Dammtorstraße 7, 20354 Hamburg, Deutschland",
+    "screeningTimes": ["09:45", "12:45", "15:45", "18:45", "21:45"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b567"]
+  },
+  {
+    "_id": "6502f2b1c9f5e3d2e9faa465",
+    "capacity": 95,
+    "occupiedSeats": 7,
+    "supportedMovieVersion": "R3D",
+    "seatPrice": 13.00,
+    "cinemaId": "6502f1a2b8f4e2c1d8e9a126",
+    "cinemaName": "Cinemaxx Hamburg",
+    "cinemaAddress": "Dammtorstraße 7, 20354 Hamburg, Deutschland",
+    "screeningTimes": ["10:20", "13:20", "16:20", "19:20", "22:20"],
+    "movieIds": ["6502f3c2d0f6e4e3eaf1b570"]
+  }
+]

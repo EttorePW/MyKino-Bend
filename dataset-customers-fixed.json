@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "6502f4d3e1f7e5e4faf2c678",
+    "firstName": "Maria",
+    "lastName": "Gonzalez",
+    "email": "maria.gonzalez@email.com",
+    "phone": "+43 676 123 4567",
+    "address": "Graben 15, 1010 Wien, Austria",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d789", "6502f5e4f2f8e6e5fbf3d790"]
+  },
+  {
+    "_id": "6502f4d3e1f7e5e4faf2c679",
+    "firstName": "Hans",
+    "lastName": "Mueller",
+    "email": "hans.mueller@email.de",
+    "phone": "+49 30 987 6543",
+    "address": "Unter den Linden 77, 10117 Berlin, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d791", "6502f5e4f2f8e6e5fbf3d792", "6502f5e4f2f8e6e5fbf3d793"]
+  },
+  {
+    "_id": "6502f4d3e1f7e5e4faf2c680",
+    "firstName": "Sofia",
+    "lastName": "Wagner",
+    "email": "sofia.wagner@email.de",
+    "phone": "+49 89 567 8901",
+    "address": "Marienplatz 8, 80331 München, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d794"]
+  },
+  {
+    "_id": "6502f4d3e1f7e5e4faf2c681",
+    "firstName": "Emma",
+    "lastName": "Schmidt", 
+    "email": "emma.schmidt@email.de",
+    "phone": "+49 40 234 5678",
+    "address": "Reeperbahn 154, 20359 Hamburg, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d795", "6502f5e4f2f8e6e5fbf3d796"]
+  }
+]

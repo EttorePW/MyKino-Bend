@@ -1,0 +1,82 @@
+[
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c678",
+    "firstName": "Maria",
+    "lastName": "Gonzalez",
+    "email": "maria.gonzalez@email.com",
+    "phone": "+43 676 123 4567",
+    "address": "Graben 15, 1010 Wien, Austria",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d789", "6502f5e4f2f8e6e5fbf3d790"]
+  },
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c679",
+    "firstName": "Hans",
+    "lastName": "Mueller",
+    "email": "hans.mueller@email.de",
+    "phone": "+49 30 987 6543",
+    "address": "Unter den Linden 77, 10117 Berlin, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d791", "6502f5e4f2f8e6e5fbf3d792", "6502f5e4f2f8e6e5fbf3d793"]
+  },
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c680",
+    "firstName": "Sofia",
+    "lastName": "Wagner",
+    "email": "sofia.wagner@email.de",
+    "phone": "+49 89 567 8901",
+    "address": "Marienplatz 8, 80331 München, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d794"]
+  },
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c681",
+    "firstName": "Emma",
+    "lastName": "Schmidt", 
+    "email": "emma.schmidt@email.de",
+    "phone": "+49 40 234 5678",
+    "address": "Reeperbahn 154, 20359 Hamburg, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d795", "6502f5e4f2f8e6e5fbf3d796"]
+  },
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c682",
+    "firstName": "Thomas",
+    "lastName": "Fischer",
+    "email": "thomas.fischer@email.com",
+    "phone": "+43 664 345 6789",
+    "address": "Stephansplatz 3, 1010 Wien, Austria",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d797"]
+  },
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c683",
+    "firstName": "Anna",
+    "lastName": "Weber",
+    "email": "anna.weber@email.de",
+    "phone": "+49 30 456 7890",
+    "address": "Alexanderplatz 5, 10178 Berlin, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d798", "6502f5e4f2f8e6e5fbf3d799"]
+  },
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c684",
+    "firstName": "Luca",
+    "lastName": "Bauer",
+    "email": "luca.bauer@email.de",
+    "phone": "+49 89 678 9012",
+    "address": "Leopoldstraße 45, 80802 München, Deutschland",
+    "anAdult": false,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d800"]
+  },
+  {
+    "customerId": "6502f4d3e1f7e5e4faf2c685",
+    "firstName": "Isabella",
+    "lastName": "Koch",
+    "email": "isabella.koch@email.de",
+    "phone": "+49 40 789 0123",
+    "address": "Mönckebergstraße 17, 20095 Hamburg, Deutschland",
+    "anAdult": true,
+    "seatIds": ["6502f5e4f2f8e6e5fbf3d801", "6502f5e4f2f8e6e5fbf3d802", "6502f5e4f2f8e6e5fbf3d803"]
+  }
+]

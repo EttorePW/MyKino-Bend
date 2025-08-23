@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e804",
+    "customerId": "6502f4d3e1f7e5e4faf2c678",
+    "customerName": "Maria Gonzalez",
+    "totalPrice": 25.00,
+    "billDate": "2025-08-23"
+  },
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e805", 
+    "customerId": "6502f4d3e1f7e5e4faf2c679",
+    "customerName": "Hans Mueller",
+    "totalPrice": 45.00,
+    "billDate": "2025-08-24"
+  },
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e806",
+    "customerId": "6502f4d3e1f7e5e4faf2c680", 
+    "customerName": "Sofia Wagner",
+    "totalPrice": 12.00,
+    "billDate": "2025-08-25"
+  },
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e807",
+    "customerId": "6502f4d3e1f7e5e4faf2c681",
+    "customerName": "Emma Schmidt", 
+    "totalPrice": 26.00,
+    "billDate": "2025-08-26"
+  },
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e808",
+    "customerId": "6502f4d3e1f7e5e4faf2c682",
+    "customerName": "Thomas Fischer",
+    "totalPrice": 11.50,
+    "billDate": "2025-08-27"
+  },
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e809",
+    "customerId": "6502f4d3e1f7e5e4faf2c683",
+    "customerName": "Anna Weber",
+    "totalPrice": 26.00,
+    "billDate": "2025-08-28"
+  },
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e810",
+    "customerId": "6502f4d3e1f7e5e4faf2c684",
+    "customerName": "Luca Bauer",
+    "totalPrice": 14.50,
+    "billDate": "2025-08-29"
+  },
+  {
+    "_id": "6502f6f5g3f9e7f6gcf4e811",
+    "customerId": "6502f4d3e1f7e5e4faf2c685", 
+    "customerName": "Nina Hoffmann",
+    "totalPrice": 37.50,
+    "billDate": "2025-08-30"
+  }
+]
