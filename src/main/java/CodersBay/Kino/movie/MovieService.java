@@ -92,7 +92,7 @@ public class MovieService {
         for (Hall hall : hallsList) {
             if(hall.getSupportedMovieVersion().equals(newMovieDTO.getMovieVersion())){
                 Movie.MovieHall movieHall = new Movie.MovieHall(
-                    hall.getHallId().hashCode(), // Use hashCode for consistent ID generation
+                    (long) hall.getHallId().hashCode(), // Convert int to Long
                     hall.getCinemaName(),
                     hall.getCinemaAddress(),
                     hall.getCapacity(),
@@ -157,38 +157,78 @@ public class MovieService {
     }
 
     public RespMovieDTO insertMovieInToHall(String movieId, String hallId) {
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> 
-            new NotFoundException("Movie not found", "/api/movies/" + movieId));
-        Hall hall = hallRepository.findById(hallId).orElseThrow(() -> 
-            new NotFoundException("Hall not found", "/api/halls/" + hallId));
-
-        if(hall.getSupportedMovieVersion().equals(movie.getMovieVersion())){
-            // Add the hall to the movie if not already present
-            boolean hallExists = movie.getHalls().stream()
-                .anyMatch(h -> h.getHallId().equals((long) hallId.hashCode()));
+        try {
+            System.out.println("Adding movie " + movieId + " to hall " + hallId);
             
-            if (!hallExists) {
-                Movie.MovieHall movieHall = new Movie.MovieHall(
-                    hallId.hashCode(), // Use hashCode for consistent ID generation
-                    hall.getCinemaName(),
-                    hall.getCinemaAddress(), 
-                    hall.getCapacity(),
-                    hall.getOccupiedSeats(),
-                    hall.getSupportedMovieVersion(),
-                    hall.getSeatPrice(),
-                    hall.getScreeningTimes()
-                );
-                movie.getHalls().add(movieHall);
-                movieRepository.save(movie);
+            Movie movie = movieRepository.findById(movieId).orElseThrow(() -> 
+                new NotFoundException("Movie not found", "/api/movies/" + movieId));
+            Hall hall = hallRepository.findById(hallId).orElseThrow(() -> 
+                new NotFoundException("Hall not found", "/api/halls/" + hallId));
+
+            System.out.println("Found movie: " + movie.getTitle() + " (version: " + movie.getMovieVersion() + ")");
+            System.out.println("Found hall: " + hall.getHallId() + " (supports: " + hall.getSupportedMovieVersion() + ")");
+
+            if(hall.getSupportedMovieVersion().equals(movie.getMovieVersion())){
+                // Add the hall to the movie if not already present
+                long hallHashId = (long) hallId.hashCode();
+                boolean hallExists = movie.getHalls().stream()
+                    .anyMatch(h -> h.getHallId().equals(hallHashId));
+                
+                System.out.println("Hall hash ID: " + hallHashId + ", hall exists: " + hallExists);
+                
+                if (!hallExists) {
+                    Movie.MovieHall movieHall = new Movie.MovieHall(
+                        hallHashId, // Convert int to Long
+                        hall.getCinemaName(),
+                        hall.getCinemaAddress(), 
+                        hall.getCapacity(),
+                        hall.getOccupiedSeats(),
+                        hall.getSupportedMovieVersion(),
+                        hall.getSeatPrice(),
+                        hall.getScreeningTimes()
+                    );
+                    movie.getHalls().add(movieHall);
+                    movieRepository.save(movie);
+                    System.out.println("Movie hall added successfully. Movie now has " + movie.getHalls().size() + " halls");
+                } else {
+                    System.out.println("Hall already exists in movie");
+                }
+                return convertToRespMovieDTO(movie);
             }
-            return convertToRespMovieDTO(movie);
+            System.err.println("Movie version " + movie.getMovieVersion() + " not supported by hall " + hall.getSupportedMovieVersion());
+            throw new MovieVersionIsNotSupported("Hall does not support movie version");
+        } catch (NotFoundException | MovieVersionIsNotSupported e) {
+            System.err.println("Error in insertMovieInToHall: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Unexpected error in insertMovieInToHall: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to add movie to hall: " + e.getMessage(), e);
         }
-        throw new MovieVersionIsNotSupported("Hall does not support movie version");
     }
 
     public ResponseEntity<String> deleteMovie(String id) {
-        movieRepository.deleteById(id);
-        return new ResponseEntity<>("Deleted the movie successfully", HttpStatus.OK);
+        try {
+            System.out.println("Attempting to delete movie with ID: " + id);
+            
+            // Check if movie exists
+            Movie movie = movieRepository.findById(id).orElseThrow(() -> 
+                new NotFoundException("Movie not found, please enter a correct ID", "/api/movies/" + id));
+            
+            System.out.println("Found movie: " + movie.getTitle() + " with " + movie.getHalls().size() + " halls");
+            
+            movieRepository.deleteById(id);
+            System.out.println("Movie deleted successfully: " + id);
+            
+            return new ResponseEntity<>("Deleted the movie successfully", HttpStatus.OK);
+        } catch (NotFoundException e) {
+            System.err.println("Movie not found for deletion: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Error deleting movie: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete movie: " + e.getMessage(), e);
+        }
     }
 
     public List<RespMovieDTO> getMoviesByHallId(String hallId) {
