@@ -28,12 +28,12 @@ public class UserController {
         return new ResponseEntity<>(userService.createNewUser(user),HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody NewUserDTO newUserDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody NewUserDTO newUserDTO) {
        return new ResponseEntity<>(userService.updateTheUser(id, newUserDTO),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
         return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.OK);
     }
 }

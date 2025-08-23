@@ -21,8 +21,8 @@ public class SeatService {
     public Seat createNewSeat(NewSeatDTO newSeatDTO, Customer customer) {
         Seat seat = Seat.builder()
                 .cinemaName(newSeatDTO.getCinemaName())
-                .hallId(newSeatDTO.getHallId())
-                .movieId(newSeatDTO.getMovieId())
+                .hallId(String.valueOf(newSeatDTO.getHallId()))
+                .movieId(String.valueOf(newSeatDTO.getMovieId()))
                 .movieVersion(newSeatDTO.getMovieVersion())
                 .movieName(newSeatDTO.getMovieName())
                 .colNumber(newSeatDTO.getColNumber())
@@ -30,7 +30,7 @@ public class SeatService {
                 .reservationDate(newSeatDTO.getReservationDate())
                 .reservationTime(newSeatDTO.getReservationTime())
                 .premieredAt(parseToDate(newSeatDTO.getPremieredAt()))
-                .customer(customer)
+                .customerId(customer.getCustomerId())
                 .build();
 
         return seatRepository.save(seat);
@@ -51,12 +51,12 @@ public class SeatService {
         return convertListToDTO(seatRepository.findAll());
     }
 
-    public RespSeatDTO getSeatById(Long id) {
+    public RespSeatDTO getSeatById(String id) {
         return convertToDTO(seatRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Seat not found, please enter a correct ID", "/api/seats/" + id)));
     }
 
-    public List<Seat> getAllSeatsById(List<Long> ids) {
+    public List<Seat> getAllSeatsById(List<String> ids) {
         return seatRepository.findAllById(ids);
     }
 
@@ -82,7 +82,7 @@ public class SeatService {
         return dtos;
     }
 
-    public String deleteSeatById(Long id) {
+    public String deleteSeatById(String id) {
         seatRepository.deleteById(id);
         return "Seat deleted successfully";
     }

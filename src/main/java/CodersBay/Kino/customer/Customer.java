@@ -1,18 +1,16 @@
 package CodersBay.Kino.customer;
 
-
-import CodersBay.Kino.bills.Bill;
-import CodersBay.Kino.seat.Seat;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collection = "customers")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,15 +18,14 @@ import java.util.List;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
+    private String customerId;
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
     private String address;
     private boolean anAdult;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Seat> seats = new ArrayList<>();
+    // List of seat IDs this customer has reserved
+    private List<String> seatIds = new ArrayList<>();
 
 }

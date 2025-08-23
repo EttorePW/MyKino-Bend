@@ -18,7 +18,7 @@ public class HallController {
     private final HallService hallService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RespHallDTO> getHall(@PathVariable long id) {
+    public ResponseEntity<RespHallDTO> getHall(@PathVariable String id) {
         return new ResponseEntity<>(hallService.getHallDTOById(id), HttpStatus.OK);
     }
 
@@ -33,12 +33,12 @@ public class HallController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RespHallDTO> putHall(@PathVariable long id, @RequestBody UpdatedHallDTO updatedHallDTO) {
+    public ResponseEntity<RespHallDTO> putHall(@PathVariable String id, @RequestBody UpdatedHallDTO updatedHallDTO) {
         return new ResponseEntity<>(hallService.updateHall(id,updatedHallDTO),HttpStatus.OK) ;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteHall(@PathVariable long id) {
+    public ResponseEntity<?> deleteHall(@PathVariable String id) {
         return new ResponseEntity<>(hallService.deleteHall(id),HttpStatus.OK);
     }
 }

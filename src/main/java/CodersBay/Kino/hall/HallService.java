@@ -10,7 +10,6 @@ import CodersBay.Kino.enums.MovieVersion;
 import CodersBay.Kino.hall.dtos.request.NewHallDTO;
 import CodersBay.Kino.hall.dtos.request.UpdatedHallDTO;
 import CodersBay.Kino.hall.dtos.response.RespHallDTO;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,29 +33,36 @@ public class HallService {
         }
 
         Cinema cinema = cinemaRepository.findById(newHallDTO.getCinemaId()).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+newHallDTO.getCinemaId()));
-        if(cinema.getHallsList().toArray().length < cinema.getMaxHalls() || cinema.getHallsList().isEmpty()) {
-            Hall hall = new Hall(newHallDTO.getCapacity(), newHallDTO.getOccupiedSeats(), newHallDTO.getSupportedMovieVersion(),newHallDTO.getSeatPrice(),cinemaRepository.findById(newHallDTO.getCinemaId()).orElseThrow(()-> new NotFoundException("Cinema could not been found","/api/cinema"+newHallDTO.getCinemaId())),newHallDTO.getScreeningTimes());
+        
+        // Check if cinema has reached max halls
+        List<Hall> existingHalls = getHallsByCinemaId(newHallDTO.getCinemaId());
+        if(existingHalls.size() < cinema.getMaxHalls()) {
+            Hall hall = new Hall(newHallDTO.getCapacity(), newHallDTO.getOccupiedSeats(), newHallDTO.getSupportedMovieVersion(), 
+                newHallDTO.getSeatPrice(), cinema.getCinemaId(), cinema.getName(), cinema.getAddress(), newHallDTO.getScreeningTimes());
             hallRepository.save(hall);
             return convertToRespHallDTO(hall);
         }
-        throw new IsNotPossibleBeacauseMaxHallsIsReached("The cinema has already to many Halls");
-
+        throw new IsNotPossibleBeacauseMaxHallsIsReached("The cinema has already too many Halls");
     }
     private boolean controllMethod(NewHallDTO newHallDTO) {
         if (newHallDTO.getCapacity() == 0
                 || newHallDTO.getSupportedMovieVersion() == null
-                || newHallDTO.getCinemaId() == 0 ){
+                || newHallDTO.getCinemaId() == null || newHallDTO.getCinemaId().isEmpty()){
             return true;
         }
         return false;
     }
 
     public RespHallDTO convertToRespHallDTO(Hall hall) {
-        return new RespHallDTO(hall.getHallId(),hall.getCapacity(),hall.getOccupiedSeats(),hall.getSupportedMovieVersion(), hall.getSeatPrice(), convertToRespCinemaDTO(hall.getCinema()),hall.getScreeningTimes());
+        // Create cinema DTO from embedded data in hall
+        RespCinemaDTO cinemaDTO = new RespCinemaDTO(hall.getCinemaId(), hall.getCinemaName(), hall.getCinemaAddress(), "", 0);
+        return new RespHallDTO(hall.getHallId(), hall.getCapacity(), hall.getOccupiedSeats(), 
+            hall.getSupportedMovieVersion(), hall.getSeatPrice(), cinemaDTO, hall.getScreeningTimes());
     }
 
-    private RespCinemaDTO convertToRespCinemaDTO(Cinema cinema) {
-        return new RespCinemaDTO(cinema.getCinemaId(), cinema.getName(), cinema.getAddress(), cinema.getManager(), cinema.getMaxHalls());
+    // Method to get halls by cinema ID
+    public List<Hall> getHallsByCinemaId(String cinemaId) {
+        return hallRepository.findByCinemaId(cinemaId);
     }
 
     public List<RespHallDTO> convertToRespHallDTOList(List<Hall> halls) {
@@ -65,10 +71,10 @@ public class HallService {
         return respHallDTOList;
     }
 
-    public RespHallDTO getHallDTOById(long id) {
+    public RespHallDTO getHallDTOById(String id) {
         return convertToRespHallDTO(hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found, please enter an correct ID","/api/cinema/"+id)));
     }
-    public Hall getHallById(long id) {
+    public Hall getHallById(String id) {
         return hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found, please enter an correct ID","/api/cinema/"+id));
     }
     public List<RespHallDTO> getAllHaals() {
@@ -78,10 +84,11 @@ public class HallService {
         return respHallDTOList;
     }
 
-    public RespHallDTO updateHall(Long id, UpdatedHallDTO updatedHallDTO) {
-
+    public RespHallDTO updateHall(String id, UpdatedHallDTO updatedHallDTO) {
         Hall hall = hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found, please enter an correct ID","/api/hall/"+id));
-        if(hall.getMoviePlaysInList().isEmpty()){
+        
+        // Check if hall has movies (simplified for MongoDB)
+        if(hall.getMovieIds().isEmpty()){
             if(updatedHallDTO.getSupportedMovieVersion().equals(hall.getSupportedMovieVersion())){
                 hall.setCapacity(updatedHallDTO.getCapacity());
                 hall.setOccupiedSeats(updatedHallDTO.getOccupiedSeats());
@@ -89,7 +96,7 @@ public class HallService {
                 hallRepository.save(hall);
                 return convertToRespHallDTO(hall);
             }
-            if(updatedHallDTO.getSupportedMovieVersion().equals(MovieVersion.R3D) && hall.getSupportedMovieVersion().equals(MovieVersion.DBOX)  ) {
+            if(updatedHallDTO.getSupportedMovieVersion().equals(MovieVersion.R3D) && hall.getSupportedMovieVersion().equals(MovieVersion.DBOX)) {
                 hall.setCapacity(updatedHallDTO.getCapacity());
                 hall.setOccupiedSeats(updatedHallDTO.getOccupiedSeats());
                 hall.setSupportedMovieVersion(updatedHallDTO.getSupportedMovieVersion());
@@ -98,10 +105,9 @@ public class HallService {
             }
             throw new CanNotChangeVersion("It is not possible to change the hall's version, only DBOX to R3D");
         }
-            throw new NotPossibleBecauseThereAreSomeMovies("There are still some movies, please remove these before updating the hall");
-
+        throw new NotPossibleBecauseThereAreSomeMovies("There are still some movies, please remove these before updating the hall");
     }
-    public ResponseEntity<String> deleteHall(Long id) {
+    public ResponseEntity<String> deleteHall(String id) {
         hallRepository.deleteById(id);
         return new ResponseEntity<>("Deleted the hall successfully",HttpStatus.OK);
     }

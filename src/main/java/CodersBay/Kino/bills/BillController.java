@@ -20,7 +20,7 @@ public class BillController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RespBillDTO> getBillById(@PathVariable Long id) {
+    public ResponseEntity<RespBillDTO> getBillById(@PathVariable String id) {
         return new ResponseEntity<>(billService.convertBillToBillDTO(billService.getBillById(id)),HttpStatus.OK);
     }
 

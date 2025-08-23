@@ -18,7 +18,7 @@ public class CinemaController {
     private final CinemaService cinemaService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CheckCinemaDTO> getCinemaDTOById(@PathVariable long id){
+    public ResponseEntity<CheckCinemaDTO> getCinemaDTOById(@PathVariable String id){
         return new ResponseEntity<>(cinemaService.getCinemaDTOById(id),HttpStatus.OK);
     }
     @GetMapping
@@ -31,7 +31,7 @@ public class CinemaController {
         return new ResponseEntity<>(cinemaService.creatNewCinema(newCinemaDTO),HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCinemaById(@PathVariable long id) {
+    public ResponseEntity<?> deleteCinemaById(@PathVariable String id) {
         return new ResponseEntity<>(cinemaService.deleteCinema(id),HttpStatus.OK);
     }
 }

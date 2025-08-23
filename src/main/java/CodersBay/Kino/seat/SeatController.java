@@ -21,13 +21,13 @@ public class SeatController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RespSeatDTO> getSeatById(@PathVariable Long id) {
+    public ResponseEntity<RespSeatDTO> getSeatById(@PathVariable String id) {
         return new ResponseEntity<>(seatService.getSeatById(id),HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSeatById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteSeatById(@PathVariable String id) {
         return new ResponseEntity<>(seatService.deleteSeatById(id),HttpStatus.OK);
     }
 }

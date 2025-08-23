@@ -40,13 +40,16 @@ public class CustomerService {
 
 
         List<Seat> seats = seatService.createNewSeatsList(newCustomerDTO.getSeats(), customer);
-        customer.setSeats(seats);
+        // Store seat IDs in customer for MongoDB
+        List<String> seatIds = seats.stream().map(Seat::getSeatId).toList();
+        customer.setSeatIds(seatIds);
 
         customerRepository.save(customer);
         return customer;
     }
 
     public RespCustomerDTO convertToDTO(Customer customer) {
+        List<Seat> seats = getCustomerSeats(customer.getCustomerId());
         return RespCustomerDTO.builder()
                 .customerId(customer.getCustomerId())
                 .firstName(customer.getFirstName())
@@ -55,17 +58,18 @@ public class CustomerService {
                 .phone(customer.getPhone())
                 .address(customer.getAddress())
                 .anAdult(customer.isAnAdult())
-                .seats(seatService.convertListToDTO(customer.getSeats()))
+                .seats(seatService.convertListToDTO(seats))
                 .build();
     }
 
     public RespBillDTO convertBillToBillDTO(Bill bill) {
+        Customer customer = findCustomerById(bill.getCustomerId());
         return RespBillDTO.builder()
                 .billId(bill.getBillId())
                 .customerName(bill.getCustomerName())
                 .totalPrice(bill.getTotalPrice())
                 .billDate(bill.getBillDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .customer(convertToDTO(bill.getCustomer()))
+                .customer(convertToDTO(customer))
                 .build();
     }
 
@@ -76,13 +80,27 @@ public class CustomerService {
         return respCustomerDTOList;
     }
 
-    public RespCustomerDTO findById(Long id) {
+    public RespCustomerDTO findById(String id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer could not be found", "/api/customers/" + id));
         return convertToDTO(customer);
     }
+    
+    public Customer findCustomerById(String id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer could not be found", "/api/customers/" + id));
+    }
+    
+    // Method to get seats by customer ID
+    public List<Seat> getCustomerSeats(String customerId) {
+        Customer customer = findCustomerById(customerId);
+        if (customer.getSeatIds() == null || customer.getSeatIds().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return seatRepository.findAllById(customer.getSeatIds());
+    }
 
-    public String deleteById(Long id) {
+    public String deleteById(String id) {
         customerRepository.deleteById(id);
         return "Customer deleted successfully";
     }

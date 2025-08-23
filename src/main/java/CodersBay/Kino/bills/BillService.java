@@ -29,10 +29,10 @@ public class BillService {
         Customer customer = customerService.createCustomer(newBillDTO.getCustomer());
 
         Bill bill = Bill.builder()
+                .customerId(customer.getCustomerId())
                 .customerName(newBillDTO.getCustomerName())
                 .totalPrice(newBillDTO.getTotalPrice())
                 .billDate(LocalDate.parse(newBillDTO.getBillDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")))
-                .customer(customer)
                 .build();
 
         billRepository.save(bill);
@@ -49,7 +49,9 @@ public class BillService {
     }
 
     public String respondTextGenerator(Bill bill) {
-        List<Seat> seats = bill.getCustomer().getSeats();
+        // Get customer and seats using the customerId reference
+        Customer customer = customerService.findCustomerById(bill.getCustomerId());
+        List<Seat> seats = customerService.getCustomerSeats(customer.getCustomerId());
 
         String seatsList = seats.stream()
                 .sorted(Comparator.comparing(Seat::getRowNumber).thenComparing(Seat::getColNumber))
@@ -97,7 +99,7 @@ public class BillService {
                 seats.isEmpty() ? "N/A" : seats.get(0).getMovieName(),
                 seats.isEmpty() ? "N/A" : seats.get(0).getMovieVersion(),
                 seats.isEmpty() ? "N/A" : seats.get(0).getCinemaName(),
-                seats.isEmpty() ? 0 : seats.get(0).getHallId(),
+                seats.isEmpty() ? "N/A" : seats.get(0).getHallId(),
                 seatsList.isEmpty() ? "N/A" : seatsList,
                 bill.getTotalPrice(),
                 bill.getBillDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
@@ -105,16 +107,17 @@ public class BillService {
     }
 
     public RespBillDTO convertBillToBillDTO(Bill bill) {
+        Customer customer = customerService.findCustomerById(bill.getCustomerId());
         return RespBillDTO.builder()
                 .billId(bill.getBillId())
                 .customerName(bill.getCustomerName())
                 .totalPrice(bill.getTotalPrice())
                 .billDate(bill.getBillDate().toString())
-                .customer(customerService.convertToDTO(bill.getCustomer()))
+                .customer(customerService.convertToDTO(customer))
                 .build();
     }
 
-    public Bill getBillById(Long id) {
+    public Bill getBillById(String id) {
         return billRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("The Bill could not be found!", "/api/bill/" + id));
     }

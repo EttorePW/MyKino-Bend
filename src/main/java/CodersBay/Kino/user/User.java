@@ -1,12 +1,10 @@
 package CodersBay.Kino.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity(name = "users")
+@Document(collection = "users")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +14,7 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private String userId;
     private String userFirstName;
     private String userLastName;
     private String userEmail;

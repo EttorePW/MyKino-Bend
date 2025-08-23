@@ -1,8 +1,6 @@
 package CodersBay.Kino.hall.dtos.request;
 
 import CodersBay.Kino.enums.MovieVersion;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +19,7 @@ public class NewHallDTO {
     private int occupiedSeats;
     private MovieVersion supportedMovieVersion;
     private double seatPrice;
-    private Long cinemaId;
+    private String cinemaId;
     private List<String> screeningTimes = new ArrayList<>();
 
 

@@ -15,10 +15,10 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class RespSeatDTO {
-    private Long seatId;
+    private String seatId;
     private String cinemaName;
-    private int hallId;
-    private int movieId;
+    private String hallId;
+    private String movieId;
     private MovieVersion movieVersion;
     private String movieName;
     private int colNumber;

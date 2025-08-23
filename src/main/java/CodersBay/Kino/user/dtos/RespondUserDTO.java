@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 public class RespondUserDTO {
 
-    private Long userId;
+    private String userId;
     private String userFirstName;
     private String userLastName;
     private String userEmail;

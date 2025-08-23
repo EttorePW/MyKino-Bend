@@ -1,10 +1,12 @@
 package CodersBay.Kino.hall;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface HallRepository extends JpaRepository<Hall, Long> {
-    List<Hall> findByHallIdIn(List<Long> halls);
+@Repository
+public interface HallRepository extends MongoRepository<Hall, String> {
+    List<Hall> findByHallIdIn(List<String> halls);
+    List<Hall> findByCinemaId(String cinemaId);
 }

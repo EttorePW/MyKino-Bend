@@ -48,7 +48,7 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMoviesByMovieVersion(movieVersion), HttpStatus.OK);
     }
     @GetMapping("/halls/{hallId}")
-    public ResponseEntity<List<RespMovieDTO>> getMoviesByHall(@PathVariable Long hallId){
+    public ResponseEntity<List<RespMovieDTO>> getMoviesByHall(@PathVariable String hallId){
         return new ResponseEntity<>(movieService.getMoviesByHallId(hallId),HttpStatus.OK);
     }
 
@@ -57,12 +57,12 @@ public class MovieController {
         return new ResponseEntity<>(movieService.createNewPost(newMovieDTO), HttpStatus.CREATED);
     }
     @PostMapping("/{movieId}/hall/{hallId}")
-    public ResponseEntity<RespMovieDTO> postHallToMovie(@PathVariable Long movieId, @PathVariable Long hallId){
+    public ResponseEntity<RespMovieDTO> postHallToMovie(@PathVariable String movieId, @PathVariable String hallId){
       return new ResponseEntity<>(movieService.insertMovieInToHall(movieId, hallId), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMovie(@PathVariable Long id){
+    public ResponseEntity<?> deleteMovie(@PathVariable String id){
         return new ResponseEntity<>(movieService.deleteMovie(id),HttpStatus.OK);
     }
     

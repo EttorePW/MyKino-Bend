@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class CheckCinemaDTO {
-    private Long cinemaId;
+    private String cinemaId;
     private String name;
     private String address;
     private String manager;

@@ -1,17 +1,14 @@
 package CodersBay.Kino.hall;
 
-import CodersBay.Kino.cinema.Cinema;
 import CodersBay.Kino.enums.MovieVersion;
-import CodersBay.Kino.movie.Movie;
-import CodersBay.Kino.pk.Movie_plays_in;
-import CodersBay.Kino.seat.Seat;
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collection = "halls")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -19,48 +16,44 @@ import java.util.List;
 public class Hall {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long hallId;
+   private String hallId;
    private int capacity;
    private int occupiedSeats;
-   @Enumerated(EnumType.STRING)
    private MovieVersion supportedMovieVersion;
    private double seatPrice;
-   @ManyToOne
-   @JoinColumn(name = "cinema_id")
-   private Cinema cinema;
-   @Convert(converter = StringListConverter.class)
-   @Column(columnDefinition = "TEXT")
+   private String cinemaId; // Reference to cinema
+   private String cinemaName; // Denormalized for easy access
+   private String cinemaAddress; // Denormalized for easy access
    private List<String> screeningTimes = new ArrayList<>();
-   @OneToMany(mappedBy = "hall",cascade = CascadeType.ALL, orphanRemoval = true)
-   private List<Movie_plays_in> moviePlaysInList = new ArrayList<>();
+   private List<String> movieIds = new ArrayList<>(); // Movies playing in this hall
 
 
-   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion,double seatPrice, Cinema cinema, List<String> screeningTimes) {
+   public Hall(int capacity, int occupiedSeats, MovieVersion supportedMovieVersion, double seatPrice, String cinemaId, String cinemaName, String cinemaAddress, List<String> screeningTimes) {
       this.capacity = capacity;
       this.occupiedSeats = occupiedSeats;
       this.supportedMovieVersion = supportedMovieVersion;
       this.seatPrice = seatPrice;
-      this.cinema = cinema;
+      this.cinemaId = cinemaId;
+      this.cinemaName = cinemaName;
+      this.cinemaAddress = cinemaAddress;
       this.screeningTimes = screeningTimes != null ? screeningTimes : new ArrayList<>();
-      this.moviePlaysInList = new ArrayList<>();
+      this.movieIds = new ArrayList<>();
    }
 
-   @PostLoad
    private void initializeLists() {
       if (this.screeningTimes == null) {
          this.screeningTimes = new ArrayList<>();
       }
-      if (this.moviePlaysInList == null) {
-         this.moviePlaysInList = new ArrayList<>();
+      if (this.movieIds == null) {
+         this.movieIds = new ArrayList<>();
       }
    }
 
-   public List<Movie_plays_in> getMoviePlaysInList() {
-      if (this.moviePlaysInList == null) {
-         this.moviePlaysInList = new ArrayList<>();
+   public List<String> getMovieIds() {
+      if (this.movieIds == null) {
+         this.movieIds = new ArrayList<>();
       }
-      return this.moviePlaysInList;
+      return this.movieIds;
    }
 
    public List<String> getScreeningTimes() {

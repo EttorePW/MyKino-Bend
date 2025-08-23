@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RespCinemaDTO {
-    private Long cinemaId;
+    private String cinemaId;
     private String name;
     private String address;
     private String manager;

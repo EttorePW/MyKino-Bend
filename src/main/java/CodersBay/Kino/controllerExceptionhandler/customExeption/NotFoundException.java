@@ -1,10 +1,9 @@
 package CodersBay.Kino.controllerExceptionhandler.customExeption;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
 
 @Data
-public class NotFoundException extends EntityNotFoundException {
+public class NotFoundException extends RuntimeException {
 
     private String url;
     public NotFoundException(String message, String url) {

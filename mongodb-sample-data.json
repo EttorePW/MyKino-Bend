@@ -1,0 +1,182 @@
+[
+  {
+    "title": "Avatar: The Way of Water",
+    "mainCharacter": "Jake Sully",
+    "description": "Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Navi race to protect their home.",
+    "premieredAt": "2022-12-16",
+    "movieVersion": "D2D",
+    "image": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
+    "imageBkd": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg",
+    "videoId": "o_WdFm9VuE4",
+    "halls": [
+      {
+        "hallId": 1,
+        "cinemaName": "CinePlex Wien",
+        "cinemaAddress": "Wien, Österreich",
+        "capacity": 120,
+        "occupiedSeats": 4,
+        "supportedMovieVersion": "D2D",
+        "seatPrice": 12.50,
+        "screeningTimes": ["10:00", "13:00", "16:00", "19:00", "22:00"]
+      },
+      {
+        "hallId": 4,
+        "cinemaName": "Mega Kino Berlin",
+        "cinemaAddress": "Berlin, Deutschland",
+        "capacity": 200,
+        "occupiedSeats": 3,
+        "supportedMovieVersion": "D2D",
+        "seatPrice": 13.00,
+        "screeningTimes": ["10:30", "13:30", "16:30", "19:30", "22:30"]
+      },
+      {
+        "hallId": 7,
+        "cinemaName": "Star Cinema München",
+        "cinemaAddress": "München, Deutschland",
+        "capacity": 110,
+        "occupiedSeats": 0,
+        "supportedMovieVersion": "D2D",
+        "seatPrice": 12.00,
+        "screeningTimes": ["10:45", "13:45", "16:45", "19:45", "22:45"]
+      }
+    ]
+  },
+  {
+    "title": "Top Gun: Maverick",
+    "mainCharacter": "Pete Mitchell",
+    "description": "After thirty years, Maverick is still pushing the envelope as a top naval aviator, but must confront ghosts of his past when he leads TOP GUN's elite graduates on a mission that demands the ultimate sacrifice from those chosen to fly it.",
+    "premieredAt": "2022-05-27",
+    "movieVersion": "DBOX",
+    "image": "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+    "imageBkd": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/odJ4hx6g6vBt4lBWKFD1tI8WS4x.jpg",
+    "videoId": "qSqVVswa420",
+    "halls": [
+      {
+        "hallId": 2,
+        "cinemaName": "CinePlex Wien",
+        "cinemaAddress": "Wien, Österreich",
+        "capacity": 80,
+        "occupiedSeats": 3,
+        "supportedMovieVersion": "DBOX",
+        "seatPrice": 14.00,
+        "screeningTimes": ["11:00", "14:00", "17:00", "20:00"]
+      },
+      {
+        "hallId": 5,
+        "cinemaName": "Mega Kino Berlin",
+        "cinemaAddress": "Berlin, Deutschland",
+        "capacity": 100,
+        "occupiedSeats": 0,
+        "supportedMovieVersion": "DBOX",
+        "seatPrice": 15.00,
+        "screeningTimes": ["11:30", "14:30", "17:30", "20:30"]
+      },
+      {
+        "hallId": 8,
+        "cinemaName": "Star Cinema München",
+        "cinemaAddress": "München, Deutschland",
+        "capacity": 75,
+        "occupiedSeats": 1,
+        "supportedMovieVersion": "DBOX",
+        "seatPrice": 14.50,
+        "screeningTimes": ["11:45", "14:45", "17:45", "20:45"]
+      }
+    ]
+  },
+  {
+    "title": "Spider-Man: No Way Home",
+    "mainCharacter": "Peter Parker",
+    "description": "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange, the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
+    "premieredAt": "2021-12-17",
+    "movieVersion": "R3D",
+    "image": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+    "imageBkd": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg",
+    "videoId": "JfVOs4VSpmA",
+    "halls": [
+      {
+        "hallId": 3,
+        "cinemaName": "CinePlex Wien",
+        "cinemaAddress": "Wien, Österreich",
+        "capacity": 150,
+        "occupiedSeats": 6,
+        "supportedMovieVersion": "R3D",
+        "seatPrice": 11.50,
+        "screeningTimes": ["09:30", "12:30", "15:30", "18:30", "21:30"]
+      },
+      {
+        "hallId": 6,
+        "cinemaName": "Mega Kino Berlin",
+        "cinemaAddress": "Berlin, Deutschland",
+        "capacity": 90,
+        "occupiedSeats": 0,
+        "supportedMovieVersion": "R3D",
+        "seatPrice": 12.50,
+        "screeningTimes": ["10:15", "13:15", "16:15", "19:15", "22:15"]
+      }
+    ]
+  },
+  {
+    "title": "Black Panther: Wakanda Forever",
+    "mainCharacter": "Shuri",
+    "description": "Queen Ramonda, Shuri, M'Baku, Okoye and the Dora Milaje fight to protect their nation from intervening world powers in the wake of King T'Challa's death.",
+    "premieredAt": "2022-11-11",
+    "movieVersion": "D2D",
+    "image": "https://image.tmdb.org/t/p/w500/sv1xJUazXeYqALzczSZ3O6nkH75.jpg",
+    "imageBkd": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/yYrvN5WFeGYjJnRzhY0QXuo4Isw.jpg",
+    "videoId": "RlOIjSNB1hE",
+    "halls": [
+      {
+        "hallId": 1,
+        "cinemaName": "CinePlex Wien",
+        "cinemaAddress": "Wien, Österreich",
+        "capacity": 120,
+        "occupiedSeats": 0,
+        "supportedMovieVersion": "D2D",
+        "seatPrice": 12.50,
+        "screeningTimes": ["12:00", "15:00", "18:00", "21:00"]
+      },
+      {
+        "hallId": 7,
+        "cinemaName": "Star Cinema München",
+        "cinemaAddress": "München, Deutschland",
+        "capacity": 110,
+        "occupiedSeats": 0,
+        "supportedMovieVersion": "D2D",
+        "seatPrice": 12.00,
+        "screeningTimes": ["11:30", "14:30", "17:30", "20:30"]
+      }
+    ]
+  },
+  {
+    "title": "The Batman",
+    "mainCharacter": "Bruce Wayne",
+    "description": "In his second year of fighting crime, Batman uncovers corruption in Gotham City that connects to his own family while facing a serial killer known as the Riddler.",
+    "premieredAt": "2022-03-04",
+    "movieVersion": "DBOX",
+    "image": "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+    "imageBkd": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg",
+    "videoId": "mqqft2x_Aa4",
+    "halls": [
+      {
+        "hallId": 2,
+        "cinemaName": "CinePlex Wien",
+        "cinemaAddress": "Wien, Österreich",
+        "capacity": 80,
+        "occupiedSeats": 0,
+        "supportedMovieVersion": "DBOX",
+        "seatPrice": 14.00,
+        "screeningTimes": ["13:30", "16:30", "19:30", "22:30"]
+      },
+      {
+        "hallId": 8,
+        "cinemaName": "Star Cinema München",
+        "cinemaAddress": "München, Deutschland",
+        "capacity": 75,
+        "occupiedSeats": 0,
+        "supportedMovieVersion": "DBOX",
+        "seatPrice": 14.50,
+        "screeningTimes": ["12:15", "15:15", "18:15", "21:15"]
+      }
+    ]
+  }
+]

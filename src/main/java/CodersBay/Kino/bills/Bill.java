@@ -1,19 +1,18 @@
 package CodersBay.Kino.bills;
 
-import CodersBay.Kino.customer.Customer;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 
-@Entity
-@Table(name = "bill")
+@Document(collection = "bills")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,14 +20,11 @@ import java.time.format.DateTimeFormatter;
 public class Bill {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long billId;
+    private String billId;
+    private String customerId; // Reference to customer ID
     private String customerName;
     private double totalPrice;
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate billDate;
-    @OneToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
 
 }

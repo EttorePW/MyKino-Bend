@@ -5,7 +5,6 @@ import CodersBay.Kino.controllerExceptionhandler.customExeption.PasswordNotMatch
 import CodersBay.Kino.user.dtos.NewUserDTO;
 import CodersBay.Kino.user.dtos.RespondUserDTO;
 import CodersBay.Kino.user.dtos.request.ControllUser;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,12 +47,12 @@ public class UserService {
         return convertUserToUserDTO(user);
     }
 
-    public String deleteUserById(Long id) {
+    public String deleteUserById(String id) {
         userRepoitory.deleteById(id);
         return "User with id: " + id + " was deleted";
     }
 
-    public RespondUserDTO updateTheUser(Long id, NewUserDTO newUserDTO) {
+    public RespondUserDTO updateTheUser(String id, NewUserDTO newUserDTO) {
         User user = userRepoitory.findById(id).orElseThrow(() -> new NotFoundException("User with id: " + id + " was not found", "/api/users/"+id));
         user.setUserFirstName(newUserDTO.getUserFirstName());
         user.setUserLastName(newUserDTO.getUserLastName());

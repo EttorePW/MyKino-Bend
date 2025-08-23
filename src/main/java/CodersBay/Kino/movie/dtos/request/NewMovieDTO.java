@@ -22,7 +22,7 @@ public class NewMovieDTO {
     private String description;
     private String premieredAt;
     private MovieVersion movieVersion;
-    private List<Long> halls;
+    private List<String> halls;
     private String image;
     private String imageBkd;
     private String videoId;

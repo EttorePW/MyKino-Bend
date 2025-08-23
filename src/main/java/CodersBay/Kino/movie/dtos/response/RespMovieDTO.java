@@ -20,7 +20,7 @@ import java.util.List;
 @Setter
 public class RespMovieDTO {
 
-    private Long movieId;
+    private String movieId;
     private String title;
     private String mainCharacter;
     private String description;

@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @Builder
 public class RespCustomerDTO {
-    private Long customerId;
+    private String customerId;
     private String firstName;
     private String lastName;
     private String email;

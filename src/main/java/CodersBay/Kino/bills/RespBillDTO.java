@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class RespBillDTO {
 
-    private Long billId;
+    private String billId;
     private String customerName;
     private double totalPrice;
     private String billDate;

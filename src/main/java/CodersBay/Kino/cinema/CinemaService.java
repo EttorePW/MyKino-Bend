@@ -8,7 +8,6 @@ import CodersBay.Kino.controllerExceptionhandler.customExeption.NotFoundExceptio
 import CodersBay.Kino.controllerExceptionhandler.customExeption.NotPossibleBecauseThereAreSomeMovies;
 import CodersBay.Kino.hall.Hall;
 import CodersBay.Kino.hall.HallService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -50,13 +49,15 @@ public class CinemaService {
     }
 
     public RespCinemaDTO convertToRespCinemaDTO(Cinema cinema) {
-        return new RespCinemaDTO(cinema.getCinemaId(), cinema.getName(), cinema.getAddress(), cinema.getManager(),cinema.getMaxHalls());
+        return new RespCinemaDTO(cinema.getCinemaId(), cinema.getName(), cinema.getAddress(), cinema.getManager(), cinema.getMaxHalls());
     }
     public CheckCinemaDTO convertToCheckCinemaDTO(Cinema cinema) {
-        return new CheckCinemaDTO(cinema.getCinemaId(), cinema.getName(), cinema.getAddress(), cinema.getManager(), cinema.getMaxHalls(),hallService.convertToRespHallDTOList(cinema.getHallsList()));
+        // Get halls for this cinema from the hall repository
+        List<Hall> halls = hallService.getHallsByCinemaId(cinema.getCinemaId());
+        return new CheckCinemaDTO(cinema.getCinemaId(), cinema.getName(), cinema.getAddress(), cinema.getManager(), cinema.getMaxHalls(), hallService.convertToRespHallDTOList(halls));
     }
 
-    public CheckCinemaDTO getCinemaDTOById(long id) {
+    public CheckCinemaDTO getCinemaDTOById(String id) {
        return convertToCheckCinemaDTO(cinemaRepository.findById(id).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+id))) ;
     }
 //    public Cinema getCinema(long id) {
@@ -79,19 +80,16 @@ public class CinemaService {
         return cinemasDTOs;
     }
 
-    public ResponseEntity<String> deleteCinema(long id) {
+    public ResponseEntity<String> deleteCinema(String id) {
         Cinema cinema = cinemaRepository.findById(id).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+id));
-        for(Hall hall : cinema.getHallsList()){
-            if (!hall.getMoviePlaysInList().isEmpty()) {
-                hallService.deleteHall(hall.getHallId());
-            }
-
+        List<Hall> halls = hallService.getHallsByCinemaId(id);
+        
+        // Delete all halls belonging to this cinema
+        for(Hall hall : halls){
+            hallService.deleteHall(hall.getHallId());
         }
-        if(cinema.getHallsList().isEmpty()){
-            cinemaRepository.deleteById(id);
-            return new ResponseEntity<>("Deleted cinema successfully",HttpStatus.OK);
-        }
-
-       throw new NotPossibleBecauseThereAreSomeMovies("There are still some Movies in this Cinema");
+        
+        cinemaRepository.deleteById(id);
+        return new ResponseEntity<>("Deleted cinema successfully", HttpStatus.OK);
     }
 }

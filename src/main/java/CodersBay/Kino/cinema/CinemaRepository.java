@@ -1,8 +1,8 @@
 package CodersBay.Kino.cinema;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CinemaRepository extends JpaRepository<Cinema, Long> {
+public interface CinemaRepository extends MongoRepository<Cinema, String> {
 }
