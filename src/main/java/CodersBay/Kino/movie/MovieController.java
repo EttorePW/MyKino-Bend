@@ -43,7 +43,12 @@ public class MovieController {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         }
     }
-    @GetMapping("/{movieVersion}")
+    @GetMapping("/id/{movieId}")
+    public ResponseEntity<RespMovieDTO> getMovieById(@PathVariable String movieId){
+        return new ResponseEntity<>(movieService.getMovieById(movieId), HttpStatus.OK);
+    }
+    
+    @GetMapping("/version/{movieVersion}")
     public ResponseEntity<List<RespMovieDTO>> getMoviesByVersion(@PathVariable String movieVersion){
         return new ResponseEntity<>(movieService.getMoviesByMovieVersion(movieVersion), HttpStatus.OK);
     }
