@@ -43,8 +43,14 @@ public class SeatService {
     }
 
     public LocalDate parseToDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        return LocalDate.parse(date, formatter);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            return LocalDate.parse(date, formatter);
+        } catch (Exception e) {
+            System.err.println("Error parsing date: " + date + ", error: " + e.getMessage());
+            // Return current date as fallback
+            return LocalDate.now();
+        }
     }
 
     public List<RespSeatDTO> getAllTheSeats() {

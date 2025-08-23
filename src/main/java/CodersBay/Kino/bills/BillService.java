@@ -26,26 +26,44 @@ public class BillService {
     private final EmailSendingService emailSendingService;
 
     public RespBillDTO createNewBill(NewBillDTO newBillDTO) throws MessagingException {
-        Customer customer = customerService.createCustomer(newBillDTO.getCustomer());
+        try {
+            System.out.println("Creating new bill for customer: " + newBillDTO.getCustomerName());
+            System.out.println("Bill date: " + newBillDTO.getBillDate());
+            System.out.println("Number of seats: " + (newBillDTO.getCustomer().getSeats() != null ? newBillDTO.getCustomer().getSeats().size() : 0));
+            
+            Customer customer = customerService.createCustomer(newBillDTO.getCustomer());
+            System.out.println("Customer created successfully with ID: " + customer.getCustomerId());
 
-        Bill bill = Bill.builder()
-                .customerId(customer.getCustomerId())
-                .customerName(newBillDTO.getCustomerName())
-                .totalPrice(newBillDTO.getTotalPrice())
-                .billDate(LocalDate.parse(newBillDTO.getBillDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")))
-                .build();
+            Bill bill = Bill.builder()
+                    .customerId(customer.getCustomerId())
+                    .customerName(newBillDTO.getCustomerName())
+                    .totalPrice(newBillDTO.getTotalPrice())
+                    .billDate(LocalDate.parse(newBillDTO.getBillDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+                    .build();
 
-        billRepository.save(bill);
+            billRepository.save(bill);
+            System.out.println("Bill saved successfully with ID: " + bill.getBillId());
 
-        // Enviar email de confirmación
-        String emailText = respondTextGenerator(bill);
-        emailSendingService.sendEmail(
-                customer.getEmail(),
-                "Reservierungsbestätigung Kino.at",
-                emailText
-        );
+            // Enviar email de confirmación
+            try {
+                String emailText = respondTextGenerator(bill);
+                emailSendingService.sendEmail(
+                        customer.getEmail(),
+                        "Reservierungsbestätigung Kino.at",
+                        emailText
+                );
+                System.out.println("Email sent successfully to: " + customer.getEmail());
+            } catch (Exception emailException) {
+                System.err.println("Email sending failed but continuing: " + emailException.getMessage());
+                // Continue even if email fails
+            }
 
-        return convertBillToBillDTO(bill);
+            return convertBillToBillDTO(bill);
+        } catch (Exception e) {
+            System.err.println("Error creating bill: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to create bill: " + e.getMessage(), e);
+        }
     }
 
     public String respondTextGenerator(Bill bill) {

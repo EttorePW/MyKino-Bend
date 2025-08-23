@@ -26,26 +26,42 @@ public class CustomerService {
     private final SeatRepository seatRepository;
 
     public Customer createCustomer(NewCustomerDTO newCustomerDTO) {
+        try {
+            System.out.println("Creating customer: " + newCustomerDTO.getFirstName() + " " + newCustomerDTO.getLastName());
+            System.out.println("Customer seats count: " + (newCustomerDTO.getSeats() != null ? newCustomerDTO.getSeats().size() : 0));
+            
+            Customer customer = Customer.builder()
+                    .firstName(newCustomerDTO.getFirstName())
+                    .lastName(newCustomerDTO.getLastName())
+                    .email(newCustomerDTO.getEmail())
+                    .phone(newCustomerDTO.getPhone())
+                    .address(newCustomerDTO.getAddress())
+                    .anAdult(newCustomerDTO.isAnAdult())
+                    .build();
 
-        Customer customer = Customer.builder()
-                .firstName(newCustomerDTO.getFirstName())
-                .lastName(newCustomerDTO.getLastName())
-                .email(newCustomerDTO.getEmail())
-                .phone(newCustomerDTO.getPhone())
-                .address(newCustomerDTO.getAddress())
-                .anAdult(newCustomerDTO.isAnAdult())
-                .build();
+            customerRepository.save(customer);
+            System.out.println("Customer saved with ID: " + customer.getCustomerId());
 
-        customerRepository.save(customer);
+            if (newCustomerDTO.getSeats() != null && !newCustomerDTO.getSeats().isEmpty()) {
+                List<Seat> seats = seatService.createNewSeatsList(newCustomerDTO.getSeats(), customer);
+                System.out.println("Created " + seats.size() + " seats for customer");
+                
+                // Store seat IDs in customer for MongoDB
+                List<String> seatIds = seats.stream().map(Seat::getSeatId).toList();
+                customer.setSeatIds(seatIds);
 
-
-        List<Seat> seats = seatService.createNewSeatsList(newCustomerDTO.getSeats(), customer);
-        // Store seat IDs in customer for MongoDB
-        List<String> seatIds = seats.stream().map(Seat::getSeatId).toList();
-        customer.setSeatIds(seatIds);
-
-        customerRepository.save(customer);
-        return customer;
+                customerRepository.save(customer);
+                System.out.println("Customer updated with seat IDs: " + seatIds);
+            } else {
+                System.out.println("No seats provided for customer");
+            }
+            
+            return customer;
+        } catch (Exception e) {
+            System.err.println("Error creating customer: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to create customer: " + e.getMessage(), e);
+        }
     }
 
     public RespCustomerDTO convertToDTO(Customer customer) {
