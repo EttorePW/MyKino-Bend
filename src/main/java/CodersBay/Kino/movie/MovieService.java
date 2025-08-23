@@ -229,18 +229,45 @@ public class MovieService {
 
     public ResponseEntity<String> deleteMovie(String id) {
         try {
+            System.out.println("=== DELETE MOVIE DEBUG ===");
             System.out.println("Attempting to delete movie with ID: " + id);
+            System.out.println("ID type: " + id.getClass().getSimpleName());
+            System.out.println("ID length: " + id.length());
+            System.out.println("ID trim: " + id.trim());
             
-            // Check if movie exists
-            Movie movie = movieRepository.findById(id).orElseThrow(() -> 
-                new NotFoundException("Movie not found, please enter a correct ID", "/api/movies/" + id));
+            // Let's check what movies exist first
+            List<Movie> allMovies = movieRepository.findAll();
+            System.out.println("Total movies in database: " + allMovies.size());
             
-            System.out.println("Found movie: " + movie.getTitle() + " with " + movie.getHalls().size() + " halls");
+            boolean foundInAll = false;
+            for (Movie m : allMovies) {
+                System.out.println("Movie in DB - ID: '" + m.getMovieId() + "', Title: " + m.getTitle());
+                if (m.getMovieId().equals(id)) {
+                    foundInAll = true;
+                    System.out.println("*** FOUND MATCH in findAll() - this movie EXISTS ***");
+                }
+            }
             
-            movieRepository.deleteById(id);
-            System.out.println("Movie deleted successfully: " + id);
+            System.out.println("Movie found in findAll(): " + foundInAll);
             
-            return new ResponseEntity<>("Deleted the movie successfully", HttpStatus.OK);
+            // Try direct findById
+            System.out.println("Trying findById...");
+            java.util.Optional<Movie> movieOpt = movieRepository.findById(id);
+            System.out.println("findById result - isPresent(): " + movieOpt.isPresent());
+            
+            if (movieOpt.isPresent()) {
+                Movie movie = movieOpt.get();
+                System.out.println("Found movie via findById: " + movie.getTitle() + " with " + movie.getHalls().size() + " halls");
+                
+                movieRepository.deleteById(id);
+                System.out.println("Movie deleted successfully: " + id);
+                
+                return new ResponseEntity<>("Deleted the movie successfully", HttpStatus.OK);
+            } else {
+                System.err.println("Movie NOT found via findById, but " + (foundInAll ? "FOUND" : "NOT found") + " in findAll()");
+                throw new NotFoundException("Movie not found, please enter a correct ID", "/api/movies/" + id);
+            }
+            
         } catch (NotFoundException e) {
             System.err.println("Movie not found for deletion: " + e.getMessage());
             throw e;
