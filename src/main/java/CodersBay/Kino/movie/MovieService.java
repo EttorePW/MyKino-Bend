@@ -43,10 +43,22 @@ public class MovieService {
     }
 
     public RespMovieDTO createNewPost(NewMovieDTO newMovieDTO) throws IOException {
-        if (controllMethod(newMovieDTO)) {
-            throw new CheckPropertiesException("Please check the syntax from your properties, you may have an error ");
+        try {
+            System.out.println("Creating new movie: " + newMovieDTO.getTitle());
+            System.out.println("Movie version: " + newMovieDTO.getMovieVersion());
+            System.out.println("Halls requested: " + newMovieDTO.getHalls());
+            
+            if (controllMethod(newMovieDTO)) {
+                throw new CheckPropertiesException("Please check the syntax from your properties, you may have an error ");
+            }
+            RespMovieDTO result = convertToRespMovieDTO(putMovieInList(newMovieDTO));
+            System.out.println("Movie created successfully with ID: " + result.getMovieId());
+            return result;
+        } catch (Exception e) {
+            System.err.println("Error creating movie: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
-        return convertToRespMovieDTO(putMovieInList(newMovieDTO));
     }
     private boolean controllMethod(NewMovieDTO newMovieDTO) {
         return newMovieDTO.getTitle() == null
@@ -80,7 +92,7 @@ public class MovieService {
         for (Hall hall : hallsList) {
             if(hall.getSupportedMovieVersion().equals(newMovieDTO.getMovieVersion())){
                 Movie.MovieHall movieHall = new Movie.MovieHall(
-                    Long.parseLong(hall.getHallId()), 
+                    hall.getHallId().hashCode(), // Use hashCode for consistent ID generation
                     hall.getCinemaName(),
                     hall.getCinemaAddress(),
                     hall.getCapacity(),
@@ -153,11 +165,11 @@ public class MovieService {
         if(hall.getSupportedMovieVersion().equals(movie.getMovieVersion())){
             // Add the hall to the movie if not already present
             boolean hallExists = movie.getHalls().stream()
-                .anyMatch(h -> h.getHallId().equals(Long.valueOf(hallId)));
+                .anyMatch(h -> h.getHallId().equals((long) hallId.hashCode()));
             
             if (!hallExists) {
                 Movie.MovieHall movieHall = new Movie.MovieHall(
-                    Long.parseLong(hall.getHallId()),
+                    hallId.hashCode(), // Use hashCode for consistent ID generation
                     hall.getCinemaName(),
                     hall.getCinemaAddress(), 
                     hall.getCapacity(),
@@ -182,10 +194,12 @@ public class MovieService {
     public List<RespMovieDTO> getMoviesByHallId(String hallId) {
         List<Movie> movies = movieRepository.findAll();
         List<RespMovieDTO> filteredMovieList = new ArrayList<>();
+        
+        long hallIdHash = hallId.hashCode();
 
         for (Movie movie : movies) {
             boolean hasHall = movie.getHalls().stream()
-                .anyMatch(hall -> hall.getHallId().equals(Long.valueOf(hallId)));
+                .anyMatch(hall -> hall.getHallId().equals(hallIdHash));
             if (hasHall) {
                 filteredMovieList.add(convertToRespMovieDTO(movie));
             }
