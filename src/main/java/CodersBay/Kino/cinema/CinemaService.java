@@ -81,15 +81,32 @@ public class CinemaService {
     }
 
     public ResponseEntity<String> deleteCinema(String id) {
-        Cinema cinema = cinemaRepository.findById(id).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+id));
-        List<Hall> halls = hallService.getHallsByCinemaId(id);
-        
-        // Delete all halls belonging to this cinema
-        for(Hall hall : halls){
-            hallService.deleteHall(hall.getHallId());
+        try {
+            System.out.println("Attempting to delete cinema with ID: " + id);
+            
+            Cinema cinema = cinemaRepository.findById(id).orElseThrow(() -> new NotFoundException("Cinema not found, please enter an correct ID","/api/cinema/"+id));
+            System.out.println("Found cinema: " + cinema.getName());
+            
+            List<Hall> halls = hallService.getHallsByCinemaId(id);
+            System.out.println("Found " + halls.size() + " halls to delete");
+            
+            // Delete all halls belonging to this cinema
+            for(Hall hall : halls){
+                System.out.println("Deleting hall with ID: " + hall.getHallId());
+                hallService.deleteHall(hall.getHallId());
+            }
+            
+            cinemaRepository.deleteById(id);
+            System.out.println("Cinema deleted successfully: " + id);
+            
+            return new ResponseEntity<>("Deleted cinema successfully", HttpStatus.OK);
+        } catch (NotFoundException e) {
+            System.err.println("Cinema not found: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Error deleting cinema: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete cinema: " + e.getMessage(), e);
         }
-        
-        cinemaRepository.deleteById(id);
-        return new ResponseEntity<>("Deleted cinema successfully", HttpStatus.OK);
     }
 }
