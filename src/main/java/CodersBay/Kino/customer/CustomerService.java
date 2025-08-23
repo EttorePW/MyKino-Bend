@@ -68,7 +68,7 @@ public class CustomerService {
                 .billId(bill.getBillId())
                 .customerName(bill.getCustomerName())
                 .totalPrice(bill.getTotalPrice())
-                .billDate(bill.getBillDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .billDate(bill.getBillDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
                 .customer(convertToDTO(customer))
                 .build();
     }
