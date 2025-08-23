@@ -1,20 +1,19 @@
 package CodersBay.Kino.movie;
 
 import CodersBay.Kino.enums.MovieVersion;
-import CodersBay.Kino.pk.Movie_plays_in;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collection = "movies")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -22,12 +21,9 @@ import java.util.List;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long movieId;
+    private String movieId;
     private String title;
     private String mainCharacter;
-    @Lob
-    @Column(columnDefinition = "TEXT")
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate premieredAt;
@@ -36,8 +32,24 @@ public class Movie {
     private String imageBkd;
     private String videoId;
 
-    @OneToMany(mappedBy = "movie",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Movie_plays_in> moviePlaysInList = new ArrayList<>();
+    // Halls embedded directly - no more complex relationships!
+    private List<MovieHall> halls = new ArrayList<>();
+    
+    // Embedded Hall information for simplicity
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MovieHall {
+        private Long hallId;
+        private String cinemaName;
+        private String cinemaAddress;
+        private int capacity;
+        private int occupiedSeats;
+        private MovieVersion supportedMovieVersion;
+        private double seatPrice;
+        private List<String> screeningTimes = new ArrayList<>();
+    }
 
     public Movie (String title, String mainCharacter, String description, LocalDate premieredAt, MovieVersion movieVersion, String image,String imageBkd, String videoId) {
         this.title = title;
@@ -48,20 +60,6 @@ public class Movie {
         this.image = image;
         this.imageBkd = imageBkd;
         this.videoId = videoId;
-        this.moviePlaysInList = new ArrayList<>();
-    };
-
-    @PostLoad
-    private void initializeLists() {
-        if (this.moviePlaysInList == null) {
-            this.moviePlaysInList = new ArrayList<>();
-        }
-    }
-
-    public List<Movie_plays_in> getMoviePlaysInList() {
-        if (this.moviePlaysInList == null) {
-            this.moviePlaysInList = new ArrayList<>();
-        }
-        return this.moviePlaysInList;
+        this.halls = new ArrayList<>();
     }
 }
