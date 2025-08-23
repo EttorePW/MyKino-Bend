@@ -171,17 +171,37 @@ public class MovieService {
     }
     
     public RespMovieDTO getMovieById(String movieId) {
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> 
-            new NotFoundException("Movie not found, please enter a correct ID", "/api/movies/" + movieId));
-        return convertToRespMovieDTO(movie);
+        // WORKAROUND: Use findAll() instead of findById() due to MongoDB inconsistency
+        List<Movie> allMovies = movieRepository.findAll();
+        
+        for (Movie movie : allMovies) {
+            if (movie.getMovieId().equals(movieId)) {
+                System.out.println("Found movie by ID using workaround: " + movie.getTitle());
+                return convertToRespMovieDTO(movie);
+            }
+        }
+        
+        System.err.println("Movie not found with ID: " + movieId);
+        throw new NotFoundException("Movie not found, please enter a correct ID", "/api/movie/" + movieId);
     }
 
     public RespMovieDTO insertMovieInToHall(String movieId, String hallId) {
         try {
             System.out.println("Adding movie " + movieId + " to hall " + hallId);
             
-            Movie movie = movieRepository.findById(movieId).orElseThrow(() -> 
-                new NotFoundException("Movie not found", "/api/movies/" + movieId));
+            // WORKAROUND: Use findAll() for movie due to MongoDB inconsistency
+            Movie movie = null;
+            List<Movie> allMovies = movieRepository.findAll();
+            for (Movie m : allMovies) {
+                if (m.getMovieId().equals(movieId)) {
+                    movie = m;
+                    break;
+                }
+            }
+            if (movie == null) {
+                throw new NotFoundException("Movie not found", "/api/movie/" + movieId);
+            }
+            
             Hall hall = hallRepository.findById(hallId).orElseThrow(() -> 
                 new NotFoundException("Hall not found", "/api/halls/" + hallId));
 
@@ -229,43 +249,41 @@ public class MovieService {
 
     public ResponseEntity<String> deleteMovie(String id) {
         try {
-            System.out.println("=== DELETE MOVIE DEBUG ===");
+            System.out.println("=== DELETE MOVIE (WORKAROUND METHOD) ===");
             System.out.println("Attempting to delete movie with ID: " + id);
-            System.out.println("ID type: " + id.getClass().getSimpleName());
-            System.out.println("ID length: " + id.length());
-            System.out.println("ID trim: " + id.trim());
             
-            // Let's check what movies exist first
+            // WORKAROUND: Use findAll() instead of findById() due to MongoDB inconsistency
             List<Movie> allMovies = movieRepository.findAll();
             System.out.println("Total movies in database: " + allMovies.size());
             
-            boolean foundInAll = false;
+            Movie movieToDelete = null;
             for (Movie m : allMovies) {
-                System.out.println("Movie in DB - ID: '" + m.getMovieId() + "', Title: " + m.getTitle());
                 if (m.getMovieId().equals(id)) {
-                    foundInAll = true;
-                    System.out.println("*** FOUND MATCH in findAll() - this movie EXISTS ***");
+                    movieToDelete = m;
+                    System.out.println("*** FOUND MOVIE TO DELETE: " + m.getTitle() + " ***");
+                    break;
                 }
             }
             
-            System.out.println("Movie found in findAll(): " + foundInAll);
-            
-            // Try direct findById
-            System.out.println("Trying findById...");
-            java.util.Optional<Movie> movieOpt = movieRepository.findById(id);
-            System.out.println("findById result - isPresent(): " + movieOpt.isPresent());
-            
-            if (movieOpt.isPresent()) {
-                Movie movie = movieOpt.get();
-                System.out.println("Found movie via findById: " + movie.getTitle() + " with " + movie.getHalls().size() + " halls");
+            if (movieToDelete != null) {
+                System.out.println("Deleting movie: " + movieToDelete.getTitle() + " with " + movieToDelete.getHalls().size() + " halls");
                 
-                movieRepository.deleteById(id);
-                System.out.println("Movie deleted successfully: " + id);
+                // Delete using the movie object found via findAll
+                movieRepository.delete(movieToDelete);
+                System.out.println("Movie deleted successfully: " + movieToDelete.getTitle());
+                
+                // Verify deletion
+                List<Movie> remainingMovies = movieRepository.findAll();
+                System.out.println("Movies remaining after deletion: " + remainingMovies.size());
                 
                 return new ResponseEntity<>("Deleted the movie successfully", HttpStatus.OK);
             } else {
-                System.err.println("Movie NOT found via findById, but " + (foundInAll ? "FOUND" : "NOT found") + " in findAll()");
-                throw new NotFoundException("Movie not found, please enter a correct ID", "/api/movies/" + id);
+                System.err.println("Movie not found with ID: " + id);
+                System.err.println("Available movie IDs:");
+                for (Movie m : allMovies) {
+                    System.err.println("  - " + m.getMovieId() + " (" + m.getTitle() + ")");
+                }
+                throw new NotFoundException("Movie not found, please enter a correct ID", "/api/movie/" + id);
             }
             
         } catch (NotFoundException e) {
