@@ -72,10 +72,27 @@ public class HallService {
     }
 
     public RespHallDTO getHallDTOById(String id) {
-        return convertToRespHallDTO(hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found, please enter an correct ID","/api/cinema/"+id)));
+        // WORKAROUND: Use findAll() instead of findById() due to MongoDB inconsistency
+        List<Hall> allHalls = hallRepository.findAll();
+        for (Hall hall : allHalls) {
+            if (hall.getHallId().equals(id)) {
+                System.out.println("Found hall by ID using workaround: " + hall.getHallId() + " (" + hall.getCinemaName() + ")");
+                return convertToRespHallDTO(hall);
+            }
+        }
+        throw new NotFoundException("Hall not found, please enter an correct ID", "/api/hall/" + id);
     }
+    
     public Hall getHallById(String id) {
-        return hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found, please enter an correct ID","/api/cinema/"+id));
+        // WORKAROUND: Use findAll() instead of findById() due to MongoDB inconsistency
+        List<Hall> allHalls = hallRepository.findAll();
+        for (Hall hall : allHalls) {
+            if (hall.getHallId().equals(id)) {
+                System.out.println("Found hall by ID using workaround: " + hall.getHallId() + " (" + hall.getCinemaName() + ")");
+                return hall;
+            }
+        }
+        throw new NotFoundException("Hall not found, please enter an correct ID", "/api/hall/" + id);
     }
     public List<RespHallDTO> getAllHaals() {
         List<RespHallDTO> respHallDTOList = new ArrayList<>();
@@ -85,7 +102,20 @@ public class HallService {
     }
 
     public RespHallDTO updateHall(String id, UpdatedHallDTO updatedHallDTO) {
-        Hall hall = hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found, please enter an correct ID","/api/hall/"+id));
+        // WORKAROUND: Use findAll() instead of findById() due to MongoDB inconsistency
+        Hall hall = null;
+        List<Hall> allHalls = hallRepository.findAll();
+        for (Hall h : allHalls) {
+            if (h.getHallId().equals(id)) {
+                hall = h;
+                break;
+            }
+        }
+        if (hall == null) {
+            throw new NotFoundException("Hall not found, please enter an correct ID", "/api/hall/" + id);
+        }
+        
+        System.out.println("Found hall for update: " + hall.getHallId() + " (" + hall.getCinemaName() + ")");
         
         // Check if hall has movies (simplified for MongoDB)
         if(hall.getMovieIds().isEmpty()){

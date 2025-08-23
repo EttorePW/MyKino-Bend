@@ -202,8 +202,23 @@ public class MovieService {
                 throw new NotFoundException("Movie not found", "/api/movie/" + movieId);
             }
             
-            Hall hall = hallRepository.findById(hallId).orElseThrow(() -> 
-                new NotFoundException("Hall not found", "/api/halls/" + hallId));
+            // WORKAROUND: Use findAll() for hall due to MongoDB inconsistency
+            Hall hall = null;
+            List<Hall> allHalls = hallRepository.findAll();
+            for (Hall h : allHalls) {
+                if (h.getHallId().equals(hallId)) {
+                    hall = h;
+                    break;
+                }
+            }
+            if (hall == null) {
+                System.err.println("Hall not found with ID: " + hallId);
+                System.err.println("Available hall IDs:");
+                for (Hall h : allHalls) {
+                    System.err.println("  - " + h.getHallId() + " (" + h.getCinemaName() + ")");
+                }
+                throw new NotFoundException("Hall not found", "/api/halls/" + hallId);
+            }
 
             System.out.println("Found movie: " + movie.getTitle() + " (version: " + movie.getMovieVersion() + ")");
             System.out.println("Found hall: " + hall.getHallId() + " (supports: " + hall.getSupportedMovieVersion() + ")");
@@ -268,13 +283,32 @@ public class MovieService {
             if (movieToDelete != null) {
                 System.out.println("Deleting movie: " + movieToDelete.getTitle() + " with " + movieToDelete.getHalls().size() + " halls");
                 
-                // Delete using the movie object found via findAll
-                movieRepository.delete(movieToDelete);
-                System.out.println("Movie deleted successfully: " + movieToDelete.getTitle());
+                // Try both delete methods as fallback
+                try {
+                    movieRepository.deleteById(id);
+                    System.out.println("Movie deleted successfully using deleteById: " + movieToDelete.getTitle());
+                } catch (Exception e1) {
+                    System.err.println("deleteById failed, trying delete(): " + e1.getMessage());
+                    try {
+                        movieRepository.delete(movieToDelete);
+                        System.out.println("Movie deleted successfully using delete(): " + movieToDelete.getTitle());
+                    } catch (Exception e2) {
+                        System.err.println("Both delete methods failed: " + e2.getMessage());
+                        throw new RuntimeException("Failed to delete movie: " + e2.getMessage(), e2);
+                    }
+                }
                 
                 // Verify deletion
                 List<Movie> remainingMovies = movieRepository.findAll();
                 System.out.println("Movies remaining after deletion: " + remainingMovies.size());
+                
+                // Double check the specific movie is gone
+                boolean stillExists = remainingMovies.stream().anyMatch(m -> m.getMovieId().equals(id));
+                System.out.println("Movie still exists after deletion: " + stillExists);
+                
+                if (stillExists) {
+                    System.err.println("WARNING: Movie still exists after deletion attempt!");
+                }
                 
                 return new ResponseEntity<>("Deleted the movie successfully", HttpStatus.OK);
             } else {
