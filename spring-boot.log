@@ -56,3 +56,6 @@ WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
 2025-08-23T11:15:52.691+02:00  INFO 84360 --- [Kino] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2025-08-23T11:15:52.691+02:00  INFO 84360 --- [Kino] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-08-23T11:15:52.692+02:00  INFO 84360 --- [Kino] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+=== DEBUG: MovieController.getMovies() called ===
+=== DEBUG: Retrieved 4 movies ===
+=== DEBUG: First movie: Spider-Man: No Way Home ===

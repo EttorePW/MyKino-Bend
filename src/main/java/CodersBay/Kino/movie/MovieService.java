@@ -77,8 +77,28 @@ public class MovieService {
                 || newMovieDTO.getVideoId().isEmpty();
     }
     public Movie putMovieInList(NewMovieDTO newMovieDTO) throws IOException {
+        System.out.println("Searching for halls with IDs: " + newMovieDTO.getHalls());
+        System.out.println("Hall IDs count: " + newMovieDTO.getHalls().size());
+        
         List<Hall> hallsList = hallRepository.findByHallIdIn(newMovieDTO.getHalls());
+        System.out.println("Found halls: " + hallsList.size());
+        
+        if (!hallsList.isEmpty()) {
+            System.out.println("First found hall ID: " + hallsList.get(0).getHallId());
+            System.out.println("First found hall cinema: " + hallsList.get(0).getCinemaName());
+            System.out.println("First found hall version: " + hallsList.get(0).getSupportedMovieVersion());
+        }
+        
         if (hallsList.isEmpty()) {
+            System.err.println("No halls found in database for IDs: " + newMovieDTO.getHalls());
+            // Let's also check what halls exist in the database
+            List<Hall> allHalls = hallRepository.findAll();
+            System.err.println("Total halls in database: " + allHalls.size());
+            if (!allHalls.isEmpty()) {
+                System.err.println("First few hall IDs in database: ");
+                allHalls.stream().limit(5).forEach(hall -> 
+                    System.err.println("  - " + hall.getHallId() + " (" + hall.getCinemaName() + ")"));
+            }
             throw new MovieVersionIsNotSupported("No Halls found by this ID");
         }
         
